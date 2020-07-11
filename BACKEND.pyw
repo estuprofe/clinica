@@ -52,33 +52,50 @@ else:
 # funciones CRUD
 
 
-def crearCliente(DNI,NOMBRE,APELLIDOS,DIRECCION,MUNICIPIO,PROVINCIA,CODIGO_POSTAL,TELEFONO,EMAIL):
+def crearCliente(tabla, datos):
     miConexion = sqlite3.connect(nombreBD)
     miCursor = miConexion.cursor()
-    datos=[DNI,NOMBRE,APELLIDOS,DIRECCION,MUNICIPIO,PROVINCIA,CODIGO_POSTAL,TELEFONO,EMAIL]
-    miCursor.execute('INSERT INTO CLIENTE VALUES (NULL,?,?,?,?,?,?,?,?,?)',datos)
+    miCursor.execute(f'INSERT INTO {tabla} VALUES (NULL,?,?,?,?,?,?,?,?,?)',datos)
     miConexion.commit()
     miConexion.close()
 
-def leerClientes(campo, valor):
-    miConexion = sqlite3.connect(nombreBD)
-    miCursor = miConexion.cursor()
-    datos = (valor,)
-    clientes = miCursor.execute(f'SELECT * FROM CLIENTE WHERE {campo} = ?',datos)
-    print(clientes.fetchall())
-    miConexion.commit()
-    miConexion.close()
-def leerClientes(campo, valor):
+def leerRegistro(tabla,campo, valor):
     miConexion = sqlite3.connect(nombreBD)
     miCursor = miConexion.cursor()
     datos = (valor,)
-    clientes = miCursor.execute(f'SELECT * FROM CLIENTE WHERE {campo} = ?',datos)
+    clientes = miCursor.execute(f'SELECT * FROM {tabla} WHERE {campo} = ?',datos)
+    print(clientes.fetchall())
+    miConexion.commit()
+    miConexion.close()
+def actualizarRegistro(tabla,campo,valor,condicion_columna, condicion_valor):
+    miConexion = sqlite3.connect(nombreBD)
+    miCursor = miConexion.cursor()
+    datos = (valor, condicion_valor)
+    
+    #miCursor.execute(f'UPDATE {tabla} SET {campo} = {valor} WHERE {condicion}')
+    miCursor.execute(f'UPDATE CLIENTE SET DIRECCION = ? WHERE {condicion_columna} = ?', datos)
+    miConexion.commit()
+    miConexion.close()
+def borrarRegistro(tabla,campo, valor):
+    miConexion = sqlite3.connect(nombreBD)
+    miCursor = miConexion.cursor()
+    datos = (valor,)
+    clientes = miCursor.execute(f'DELETE FROM {tabla} WHERE {campo} = ?',datos)
     print(clientes.fetchall())
     miConexion.commit()
     miConexion.close()
 
+datos=[('123','Luis','Zurita Herrera', 'micalle','jorelre','ererer','12342','69696868','putomail.comfg43434343rgrddd4gr'),
+        ('1222ff2223','Antonio','Zurita Herrera', 'micalle','jorelre','ererer','12342','69696868','putomail.comfg43343rgrddd4gr'),
+        ('1222ff22','Jaime','Zurita Herrera', 'micalle','jorelre','ererer','12342','69696868','putomail.comfd4gr'),
+        ('1222f','Luis','Zurita Herrera', 'micalle','jorelre','ererer','12342','69696868','putrgrddd4gr'),
+        ('1222','Luis','Zurita Herrera', 'micalle','jorelre','ererer','12342','69696868','prgrddd4gr')]
+#for i in datos:
+#    crearCliente('CLIENTE', i)
+#leerRegistro('CLIENTE','NOMBRE','Luis')
 
-#crearCliente('1236','Luis','Zurita Herrera', 'micalle','jorelre','ererer','12342','69696868','putomail.comfgrgr4gr')
-#crearCliente('1234','Luisa','Herrera JIMENEZ', 'micalle','jorelre','ererer','12342','69696868','putomail.come')
-#crearCliente('12345','Luisete','asdfta Herrera', 'micalle','jorelre','ererer','12342','69696868','putomail.comee')
-leerClientes('DIRECCION','micalle')
+
+#actualizarRegistro('CLIENTE','DIRECCION', 'definitivamente sí', 'NOMBRE', 'Luis')
+leerRegistro('CLIENTE','NOMBRE','Luis')
+#borrarRegistro('CLIENTE', 'DNI', '123')
+leerRegistro('CLIENTE','NOMBRE','Luis')
