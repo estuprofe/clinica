@@ -1,9 +1,8 @@
 import sqlite3
 import os
-#setup
-nombreBD="clinica.db"
-ivas = [21,10,4]
-
+# setup
+nombreBD = "clinica.db"
+ivas = [21, 10, 4]
 
 
 
@@ -20,7 +19,7 @@ if not(os.path.isfile(nombreBD)):
     PROVINCIA VARCHAR(50),
     CODIGO_POSTAL VARCHAR(10),
     TELEFONO VARCHAR(15),
-    EMAIL VARCHAR(50) NOT NULL UNIQUE
+    EMAIL VARCHAR(50) NOT NULL 
     )''')
     miCursor.execute('''CREATE TABLE FACTURA(
     ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -45,15 +44,41 @@ if not(os.path.isfile(nombreBD)):
     )''')
     for i in ivas:
         miCursor.execute(f'INSERT INTO IVA VALUES (NULL,{i})')
-
     miConexion.commit()
     miConexion.close()
 else:
     print(f'El archivo {nombreBD} ya existe')
 
+# funciones CRUD
 
 
+def crearCliente(DNI,NOMBRE,APELLIDOS,DIRECCION,MUNICIPIO,PROVINCIA,CODIGO_POSTAL,TELEFONO,EMAIL):
+    miConexion = sqlite3.connect(nombreBD)
+    miCursor = miConexion.cursor()
+    datos=[DNI,NOMBRE,APELLIDOS,DIRECCION,MUNICIPIO,PROVINCIA,CODIGO_POSTAL,TELEFONO,EMAIL]
+    miCursor.execute('INSERT INTO CLIENTE VALUES (NULL,?,?,?,?,?,?,?,?,?)',datos)
+    miConexion.commit()
+    miConexion.close()
+
+def leerClientes(campo, valor):
+    miConexion = sqlite3.connect(nombreBD)
+    miCursor = miConexion.cursor()
+    datos = (valor,)
+    clientes = miCursor.execute(f'SELECT * FROM CLIENTE WHERE {campo} = ?',datos)
+    print(clientes.fetchall())
+    miConexion.commit()
+    miConexion.close()
+def leerClientes(campo, valor):
+    miConexion = sqlite3.connect(nombreBD)
+    miCursor = miConexion.cursor()
+    datos = (valor,)
+    clientes = miCursor.execute(f'SELECT * FROM CLIENTE WHERE {campo} = ?',datos)
+    print(clientes.fetchall())
+    miConexion.commit()
+    miConexion.close()
 
 
-
-
+#crearCliente('1236','Luis','Zurita Herrera', 'micalle','jorelre','ererer','12342','69696868','putomail.comfgrgr4gr')
+#crearCliente('1234','Luisa','Herrera JIMENEZ', 'micalle','jorelre','ererer','12342','69696868','putomail.come')
+#crearCliente('12345','Luisete','asdfta Herrera', 'micalle','jorelre','ererer','12342','69696868','putomail.comee')
+leerClientes('DIRECCION','micalle')
