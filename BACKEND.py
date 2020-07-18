@@ -1,14 +1,15 @@
-from manejoBD.CRUD import *
+from modulos.modulos_importados import *
+
 
 # setup
 
 ivas = [21, 10, 4]
-
+nombreBD = "clinica.db"
 #Creación de la BD y la tabla
 if not(os.path.isfile(nombreBD)):
     miConexion = sqlite3.connect(nombreBD)
     miCursor = miConexion.cursor()
-    miCursor.execute('''CREATE TABLE CLIENTE(
+    miCursor.execute('''CREATE TABLE IF NOT EXISTS CLIENTE(
     CLIENTE_ID INTEGER PRIMARY KEY AUTOINCREMENT,
     DNI VARCHAR(12) NOT NULL UNIQUE,
     NOMBRE VARCHAR(20) NOT NULL,
@@ -21,7 +22,7 @@ if not(os.path.isfile(nombreBD)):
     EMAIL VARCHAR(50) NOT NULL 
     )''')
 
-    miCursor.execute('''CREATE TABLE FACTURA(
+    miCursor.execute('''CREATE TABLE IF NOT EXISTS FACTURA(
     ID INTEGER PRIMARY KEY AUTOINCREMENT,
     CODIGO_FACTURA VARCHAR(7) NOT NULL UNIQUE,
     FECHA_FACTURA DATE NOT NULL,
@@ -35,7 +36,7 @@ if not(os.path.isfile(nombreBD)):
     FOREIGN KEY(SERVICIO_ID) REFERENCES SERVICIO(ID)
     )''')
 
-    miCursor.execute('''CREATE TABLE SERVICIO(
+    miCursor.execute('''CREATE TABLE IF NOT EXISTS SERVICIO(
     ID INTEGER PRIMARY KEY AUTOINCREMENT,
     FECHA_SERVICIO DATE NOT NULL,
     TRATAMIENTO TEXT,
@@ -43,7 +44,7 @@ if not(os.path.isfile(nombreBD)):
     FACTURA_ID INTEGER
     )''')
 
-    miCursor.execute('''CREATE TABLE IVA(
+    miCursor.execute('''CREATE TABLE IF NOT EXISTS IVA(
     IVA_ID INTEGER PRIMARY KEY AUTOINCREMENT,
     TIPO INTEGER NOT NULL
     )''')
