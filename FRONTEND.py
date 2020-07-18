@@ -2,20 +2,14 @@
 # -*- coding: utf-8 -*-
 #Construido siguiendo el blog https://python-para-impacientes.blogspot.com/
 #módulos utilizados
+from modulos.modulos_importados import *
 
 
 
-from BACKEND import *
-            
-
-from modulos.PaginaInicial import *
-from modulos.PaginaCliente import *
-from modulos.PaginaFactura import *
-from modulos.PaginaResumen import *
 # import Tkinter as tk     # python 2
 # import tkFont as tkfont  # python 2
 #setup
-
+nombreClinica="Elisa Isabel García López"
 
 
 class Aplicacion(tk.Tk):

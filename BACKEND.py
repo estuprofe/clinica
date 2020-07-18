@@ -1,9 +1,10 @@
-from modulos.CRUD import *
+from modulos.modulos_importados import *
+
 
 # setup
 
 ivas = [21, 10, 4]
-
+nombreBD = "clinica.db"
 #Creación de la BD y la tabla
 if not(os.path.isfile(nombreBD)):
     miConexion = sqlite3.connect(nombreBD)
