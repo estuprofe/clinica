@@ -1,8 +1,8 @@
-import sqlite3
-import os
+from modulos.modulos_importados import *
+
 
 # setup
-nombreBD = "clinica.db"
+nombreBD = modulos.modulos_importados.NOMBREBD
 
 # funciones CRUD
 

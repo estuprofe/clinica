@@ -1,5 +1,4 @@
 from modulos.modulos_importados import *
-from modulos.CRUD import *
 
 class PaginaCliente(tk.Frame):
 
