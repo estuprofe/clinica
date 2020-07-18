@@ -38,8 +38,9 @@ def leerRegistro(tabla, campo, valor):
     miConexion = sqlite3.connect(nombreBD)
     miCursor = miConexion.cursor()
     datos = (valor,)
-    clientes = miCursor.execute(f'SELECT * FROM {tabla} WHERE {campo} = ?', datos)
-    print(clientes.fetchall())
+    clientes = miCursor.execute(f'SELECT * FROM {tabla} WHERE {campo} = ?', datos).fetchall()
+    print(clientes)
+    return clientes
     miConexion.commit()
     miConexion.close()
 
@@ -48,10 +49,11 @@ def leerTodo(tabla):
     miConexion = sqlite3.connect(nombreBD)
     miCursor = miConexion.cursor()
 
-    query = miCursor.execute(f'SELECT * FROM {tabla}')
-    print(query.fetchall())
+    query = miCursor.execute(f'SELECT * FROM {tabla}').fetchall()
+    print(query)
     miConexion.commit()
     miConexion.close()
+    return query
 
 
 def actualizarRegistro(tabla, campo, valor, condicion_columna, condicion_valor):
