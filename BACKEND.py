@@ -3,7 +3,7 @@ from modulos.modulos_importados import *
 
 # setup
 
-ivas = [21, 10, 4]
+ivas = [21, 10, 4, 0]
 nombreBD = "clinica.db"
 #Creación de la BD y la tabla
 if not(os.path.isfile(nombreBD)):

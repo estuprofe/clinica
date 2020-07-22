@@ -50,7 +50,7 @@ def leerTodo(tabla):
     miCursor = miConexion.cursor()
 
     query = miCursor.execute(f'SELECT * FROM {tabla}').fetchall()
-    print(query)
+    
     miConexion.commit()
     miConexion.close()
     return query
@@ -60,9 +60,10 @@ def actualizarRegistro(tabla, campo, valor, condicion_columna, condicion_valor):
     miConexion = sqlite3.connect(nombreBD)
     miCursor = miConexion.cursor()
     datos = (valor, condicion_valor)
-
+    #print("Se ha llamado a actualizarRegistro")
     # miCursor.execute(f'UPDATE {tabla} SET {campo} = {valor} WHERE {condicion}')
     miCursor.execute(f'UPDATE {tabla} SET {campo} = ? WHERE {condicion_columna} = ?', datos)
+    #print(leerTodo("CLIENTE"))
     miConexion.commit()
     miConexion.close()
 

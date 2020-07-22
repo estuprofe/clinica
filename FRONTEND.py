@@ -16,7 +16,7 @@ class Aplicacion(tk.Tk):
 
   def __init__(self, *args, **kwargs):
     tk.Tk.__init__(self, *args, **kwargs)
-
+    self.ventana = 0
     self.fuente_titulo = tkfont.Font(
         family='Helvetica', size=18, weight="bold", slant="italic")
     self.geometry('800x600')
@@ -41,7 +41,7 @@ class Aplicacion(tk.Tk):
       # will be the one that is visible.
       marco.grid(row=0, column=0, sticky="nsew")
 
-    self.mostrar_marco("PaginaCliente")
+    self.mostrar_marco("PaginaFactura")
 
   def mostrar_marco(self, nombre_pagina):
     '''Show a frame for the given page name'''
