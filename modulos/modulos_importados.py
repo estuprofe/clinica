@@ -5,8 +5,8 @@ from tkinter import StringVar
 from tkinter import END
 from tkcalendar import Calendar, DateEntry
 
-from modulos.PaginaCliente import *
-from modulos.PaginaFactura import *
-from modulos.PaginaInicial import *
-from modulos.PaginaResumen import *
+from modulos.graficos.PaginaCliente import *
+from modulos.graficos.PaginaFactura import *
+from modulos.graficos.PaginaInicial import *
+from modulos.graficos.PaginaResumen import *
 

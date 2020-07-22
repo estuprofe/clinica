@@ -1,24 +1,22 @@
 from modulos.modulos_importados import *
 
-class VentanaClientes(tk.Frame):
+def VentanaClientes(self):
 
-    def __init__(self):
-        
-        self.ventana = tk.Toplevel()
-        
-        self.ventana.geometry('300x200')
+    self.ventana= tk.Toplevel()
+    self.ventana.title('Elige al cliente')    
+    self.ventana.geometry('300x200')
         
         
         
 
-        self.caja_clientes=tk.Listbox(self, height =10, width=35)
-        self.caja_clientes.grid(row=4, column=3, rowspan=9, columnspan = 2)
-        self.scroll=tk.Scrollbar(self)
-        self.scroll.grid(row=4, column=5, rowspan=9)
-        self.caja_clientes.configure(yscrollcommand=self.scroll.set)
-        self.scroll.configure(command=self.caja_clientes.yview)
-        self.caja_clientes.bind('<<ListboxSelect>>',self.coger_filas_seleccionadas)
-        self.venta.mainloop()
+    self.caja_clientes=tk.Listbox(self.ventana, height =10, width=35)
+    self.caja_clientes.grid(row=4, column=3, rowspan=9, columnspan = 2)
+    self.scroll=tk.Scrollbar(self.ventana)
+    self.scroll.grid(row=4, column=5, rowspan=9)
+    self.caja_clientes.configure(yscrollcommand=self.scroll.set)
+    self.scroll.configure(command=self.caja_clientes.yview)
+    self.caja_clientes.bind('<<ListboxSelect>>',self.coger_filas_seleccionadas)
+        
 
 
 
@@ -46,7 +44,7 @@ class PaginaFactura(tk.Frame):
     self.etiqueta_fecha = tk.Label(self, text="Fecha factura")
     self.etiqueta_fecha.grid(row=3, column = 3)
     self.cal = DateEntry(self, width=12, background='darkblue',
-                    foreground='white', borderwidth=2)
+                    foreground='white', borderwidth=2, locale='es_ES')
     self.cal.grid(row=3, column=4)
     #ttk.Button(self, text="ok", command = lambda: self.ver_fecha()).grid(row=3, column=2)
 
@@ -154,4 +152,4 @@ class PaginaFactura(tk.Frame):
         print(self.cal.get_date())
 
   def abrir_cliente(self):
-    ventana_emergente= VentanaClientes()
+    ventana_emergente= VentanaClientes(self)
