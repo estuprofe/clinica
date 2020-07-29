@@ -9,4 +9,8 @@ from modulos.graficos.PaginaCliente import *
 from modulos.graficos.PaginaFactura import *
 from modulos.graficos.PaginaInicial import *
 from modulos.graficos.PaginaResumen import *
+from modulos.graficos.ElegirCliente import VentanaClientes
+
+from modulos.CRUD import *
+
 

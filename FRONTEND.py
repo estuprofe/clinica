@@ -6,6 +6,8 @@ from modulos.modulos_importados import *
 
 
 
+
+
 # import Tkinter as tk     # python 2
 # import tkFont as tkfont  # python 2
 #setup
