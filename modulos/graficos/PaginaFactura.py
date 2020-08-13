@@ -1,5 +1,6 @@
 from modulos.modulos_importados import *
 from modulos.graficos.ElegirCliente import VentanaClientes
+from datetime import *
 
     
 
@@ -12,15 +13,23 @@ class PaginaFactura(tk.Frame):
         tk.Frame.__init__(self, padre)
         self.cliente = cliente
         self.controlador =  controlador
+        #caja de facturas
+        self.caja_facturas=tk.Listbox(self, height =10, width=35)
+        self.caja_facturas.grid(row=0, column=3, rowspan=9, columnspan = 4)
+        self.scroll_facturas=tk.Scrollbar(self)
+        self.scroll_facturas.grid(row=0, column=6, rowspan=9)
+        self.caja_facturas.configure(yscrollcommand=self.scroll_facturas.set)
+        self.scroll_facturas.configure(command=self.caja_facturas.yview)
+        self.caja_facturas.bind('<<ListboxSelect>>',self.caja_factura_seleccionada)
         #título
         self.label = tk.Label(self, text="Factura", font=self.controlador.fuente_titulo)
-        self.label.grid(column=0, row=0)
+        self.label.grid(column=0, row=10)
 
         self.texto_id_factura=StringVar()
         self.etiqueta_id_factura = tk.Label(self, text="ID Factura")
-        self.etiqueta_id_factura.grid(row=10, column = 3)
+        self.etiqueta_id_factura.grid(row=11, column = 0)
         self.cuadro_id_factura = ttk.Entry(self, textvariable= self.texto_id_factura, justify=tk.RIGHT)
-        self.cuadro_id_factura.grid(row=10, column = 4)
+        self.cuadro_id_factura.grid(row=11, column = 1)
         
 
         self.texto_codigo=StringVar()
@@ -38,9 +47,9 @@ class PaginaFactura(tk.Frame):
 
         self.texto_cliente=StringVar()
         self.etiqueta_cliente = tk.Label(self, text="Cliente: ")
-        self.etiqueta_cliente.grid(row=10, column = 0)
+        self.etiqueta_cliente.grid(row=12, column = 0)
         self.cuadro_cliente = ttk.Entry(self, textvariable= self.texto_cliente, justify=tk.RIGHT)
-        self.cuadro_cliente.grid(row=10, column = 1)
+        self.cuadro_cliente.grid(row=12, column = 1)
 
 
         self.texto_dni=StringVar()
@@ -92,13 +101,7 @@ class PaginaFactura(tk.Frame):
         self.cuadro_cp.grid(row=80, column = 1)
 
 
-        self.caja_facturas=tk.Listbox(self, height =10, width=35)
-        self.caja_facturas.grid(row=4, column=3, rowspan=9, columnspan = 2)
-        self.scroll_facturas=tk.Scrollbar(self)
-        self.scroll_facturas.grid(row=4, column=5, rowspan=9)
-        self.caja_facturas.configure(yscrollcommand=self.scroll_facturas.set)
-        self.scroll_facturas.configure(command=self.caja_facturas.yview)
-        self.caja_facturas.bind('<<ListboxSelect>>',self.caja_factura_seleccionada)
+        
 
 
         boton = ttk.Button(self, text='Elegir Cliente para la factura', 
@@ -112,12 +115,41 @@ class PaginaFactura(tk.Frame):
         boton_combo = tk.Button(self, text="Prueba Combo",
                            command= self.combo_seleccionado)
         boton_combo.grid(row=90, column = 30)
+
+        boton_actualizar = tk.Button(self, text="actualizar facturas",
+                       command=lambda: self.editar_facturas())
+        boton_actualizar.grid(row=1, column = 1)
+
+        boton_borrar = tk.Button(self, text="Borrar cuadros",
+                           command=lambda: self.borrar())
+
+        boton_borrar.grid(row=2, column = 0)
+
+
+
+        boton_ver_clientes = tk.Button(self, text="Ver facturas",
+                                   command=lambda: self.ver_facturas())
+        boton_ver_clientes.grid(row=1, column = 0)
+
+         
+               
+
+        boton_eliminar = tk.Button(self, text="Eliminar factura",
+                                   command=lambda: self.eliminar_factura())
+        boton_eliminar.grid(row=2, column = 1)
+
+
+        boton_añadir = tk.Button(self, text="Añadir factura",
+                           command=lambda: self.añadir_factura())
+        boton_añadir.grid(row=2, column = 0, columnspan=3)
         
         # iniciar el cuadro con las facturas
-        self.ver()
+        
     def combo_seleccionado(self, event):
         iva_seleccionado = self.combo_iva.get()
         print('seleccionado: ',iva_seleccionado)
+        
+            
 
 
     def set_cliente(self,cliente):
@@ -146,7 +178,7 @@ class PaginaFactura(tk.Frame):
         self.cuadro_cp.insert(END, cliente[7])
 
 
-    def caja_factura_seleccionada(self):
+    def caja_factura_seleccionada(self, evento):
 
         global tupla_facturas_seleccionadas
         global id_factura
@@ -161,8 +193,15 @@ class PaginaFactura(tk.Frame):
         self.cuadro_id_factura.delete(0,END)
         self.cuadro_id_factura.insert(END,tupla_facturas_seleccionadas[0])
 
+        self.cuadro_cliente.delete(0,END)
+        self.cuadro_cliente.insert(END,tupla_facturas_seleccionadas[5])
+
+        lista_fecha=(str(tupla_facturas_seleccionadas[2]).split("/"))
+        self.cal.set_date(datetime(int(lista_fecha[0]),int(lista_fecha[1]),int(lista_fecha[2])))
         
-    def ver(self):
+
+        
+    def ver_facturas(self):
         self.caja_facturas.delete(0, END)
         for fila in leerTodo("FACTURA"):
                 self.caja_facturas.insert(END,fila)         

@@ -29,7 +29,7 @@ def crearFactura(datos):
     miConexion = sqlite3.connect(nombreBD)
     miCursor = miConexion.cursor()
     for i in datos:
-        miCursor.execute(f'INSERT INTO FACTURA VALUES (NULL,?,?,?,?,?,?,?)', i)
+        miCursor.execute(f'INSERT INTO FACTURA VALUES (NULL,?,?,?,?,?)', i)
     miConexion.commit()
     miConexion.close()
 

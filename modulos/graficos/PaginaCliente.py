@@ -92,7 +92,7 @@ class PaginaCliente(tk.Frame):
     boton_inicio.grid(row=0, column = 1)
 
     boton_inicio = tk.Button(self, text="FACTURA",
-                       command=lambda:  controlador.mostrar_marco("PaginaInicial"))
+                       command=lambda:  controlador.mostrar_marco("PaginaFactura"))
     boton_inicio.grid(row=0, column = 2)
   
 
@@ -126,7 +126,7 @@ class PaginaCliente(tk.Frame):
     boton_añadir.grid(row=24, column = 0, columnspan=3)
         
     # iniciar el cuadro con los clientes
-    self.ver()
+    
 
 
 
