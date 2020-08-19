@@ -6,6 +6,8 @@ from modulos.modulos_importados import *
 
 
 
+
+
 # import Tkinter as tk     # python 2
 # import tkFont as tkfont  # python 2
 #setup
@@ -16,7 +18,7 @@ class Aplicacion(tk.Tk):
 
   def __init__(self, *args, **kwargs):
     tk.Tk.__init__(self, *args, **kwargs)
-    self.ventana = 0
+    
     self.fuente_titulo = tkfont.Font(
         family='Helvetica', size=18, weight="bold", slant="italic")
     self.geometry('800x600')

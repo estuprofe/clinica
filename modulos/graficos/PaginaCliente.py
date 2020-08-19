@@ -1,10 +1,14 @@
 from modulos.modulos_importados import *
 from modulos.CRUD import *
+from modulos.graficos.ElegirCliente import VentanaClientes
+
+
 
 class PaginaCliente(tk.Frame):
 
   def __init__(self, padre,  controlador):
     tk.Frame.__init__(self, padre)
+    
     self.controlador =  controlador
     #título
     self.label = tk.Label(self, text="Clientes", font=self.controlador.fuente_titulo)
@@ -73,45 +77,71 @@ class PaginaCliente(tk.Frame):
     self.cuadro_email.grid(row=10, column = 1)
 
     self.caja_clientes=tk.Listbox(self, height =10, width=35)
-    self.caja_clientes.grid(row=11, column=0, rowspan=10, columnspan = 2)
+    self.caja_clientes.grid(row=4, column=3, rowspan=9, columnspan = 2)
     self.scroll=tk.Scrollbar(self)
-    self.scroll.grid(row=11, column=2, rowspan=10)
+    self.scroll.grid(row=4, column=5, rowspan=9)
     self.caja_clientes.configure(yscrollcommand=self.scroll.set)
     self.scroll.configure(command=self.caja_clientes.yview)
-    self.caja_clientes.bind('<<ListboxSelect>>',self.coger_filas_seleccionadas)
+    self.caja_clientes.bind('<<ListboxSelect>>',self.escribir_campos)
+
+
 
     #Botones
-    button = tk.Button(self, text="INICIO",
+    boton_inicio = tk.Button(self, text="INICIO",
                        command=lambda:  controlador.mostrar_marco("PaginaInicial"))
-    button.grid(row=0, column = 1)
+    boton_inicio.grid(row=0, column = 1)
+
+    boton_inicio = tk.Button(self, text="FACTURA",
+                       command=lambda:  controlador.mostrar_marco("PaginaFactura"))
+    boton_inicio.grid(row=0, column = 2)
   
-    button = tk.Button(self, text="Ver clientes",
-                       command=lambda: self.ver())
-    button.grid(row=21, column = 0)
 
-    button = tk.Button(self, text="actualizar clientes",
+   
+
+    boton_actualizar = tk.Button(self, text="actualizar clientes",
                        command=lambda: self.editar())
-    button.grid(row=21, column = 1)
+    boton_actualizar.grid(row=21, column = 1)
 
-    button = tk.Button(self, text="Borrar cuadros",
+    boton_borrar = tk.Button(self, text="Borrar cuadros",
                        command=lambda: self.borrar())
-    button.grid(row=22, column = 0)
 
-    button = tk.Button(self, text="Eliminar cliente",
-                       command=lambda: self.eliminar())
-    button.grid(row=22, column = 1)
+    boton_borrar.grid(row=22, column = 0)
 
-    button = tk.Button(self, text="Añadir cliente",
+
+
+    boton_ver_clientes = tk.Button(self, text="Ver clientes",
+                               command=lambda: self.ver())
+    boton_ver_clientes.grid(row=21, column = 0)
+
+     
+           
+
+    boton_eliminar = tk.Button(self, text="Eliminar cliente",
+                               command=lambda: self.eliminar())
+    boton_eliminar.grid(row=22, column = 1)
+
+
+    boton_añadir = tk.Button(self, text="Añadir cliente",
                        command=lambda: self.añadir())
-    button.grid(row=23, column = 0, columnspan=3)
-      
-  def coger_filas_seleccionadas(self,event):
+    boton_añadir.grid(row=24, column = 0, columnspan=3)
+        
+    # iniciar el cuadro con los clientes
+    
+
+
+
+
+  def escribir_campos(self, event):
+    
+    
     global tupla_seleccionados
     global id_seleccionado
-
-    indice=self.caja_clientes.curselection()[0]
+    indice = self.caja_clientes.curselection()[0]
 
     tupla_seleccionados=self.caja_clientes.get(indice)
+    self.controlador.marcos['PaginaFactura'].set_cliente(tupla_seleccionados)
+
+
     id_seleccionado=tupla_seleccionados[0]
 
     self.cuadro_id.delete(0,END)
@@ -144,12 +174,22 @@ class PaginaCliente(tk.Frame):
     self.cuadro_email.delete(0,END)
     self.cuadro_email.insert(END,tupla_seleccionados[9])
 
+      
+  def boton_elegir_pulsado(self,event):#Reinicia los cuadros con la información extraída de clientes
     
 
+    seleccionado_ventana = VentanaClientes()
+    
   def ver(self):
     self.caja_clientes.delete(0, END)
     for fila in leerTodo("CLIENTE"):
-        self.caja_clientes.insert(END,fila)
+            self.caja_clientes.insert(END,fila)
+
+        
+
+  def eliminar(self):
+    borrarRegistro("CLIENTE", "CLIENTE_ID", id_seleccionado)
+    self.ver()  
 
 
 
@@ -178,8 +218,7 @@ class PaginaCliente(tk.Frame):
     self.cuadro_telefono.delete(0,END)
     self.cuadro_email.delete(0,END)
 
-  def eliminar(self):
-    borrarRegistro("CLIENTE", "CLIENTE_ID", id_seleccionado)
+
 
 
   def añadir(self):
