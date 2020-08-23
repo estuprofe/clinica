@@ -1,6 +1,6 @@
 from modulos.modulos_importados import *
 from modulos.CRUD import *
-from modulos.graficos.ElegirCliente import VentanaClientes
+
 
 
 
@@ -137,6 +137,7 @@ class PaginaCliente(tk.Frame):
     global tupla_seleccionados
     global id_seleccionado
     indice = self.caja_clientes.curselection()[0]
+    print (self.caja_clientes.curselection())
 
     tupla_seleccionados=self.caja_clientes.get(indice)
     self.controlador.marcos['PaginaFactura'].set_cliente(tupla_seleccionados)

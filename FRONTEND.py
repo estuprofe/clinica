@@ -23,7 +23,7 @@ class Aplicacion(tk.Tk):
         family='Helvetica', size=18, weight="bold", slant="italic")
     self.geometry('800x600')
       
-    self.title(f'Programa de facturación. Clinica {nombreClinica} ')
+    self.title(f'Programa de facturación. Clinica {nombreClinica}')
     # the container is where we'll stack a bunch of frames
     # on top of each other, then the one we want visible
     # will be raised above the others

@@ -1,11 +1,15 @@
 import sqlite3
 import os
 
+from datetime import *
 # setup
 nombreBD = "clinica.db"
 
 # funciones CRUD
-
+def cal2fecha(fecha):
+    fecha=fecha.split("/")
+    fecha = datetime(2000+int(fecha[2]),int(fecha[1]),int(fecha[0])).date()
+    return fecha
 
 def crearCliente(datos):
     miConexion = sqlite3.connect(nombreBD)
@@ -38,9 +42,9 @@ def leerRegistro(tabla, campo, valor):
     miConexion = sqlite3.connect(nombreBD)
     miCursor = miConexion.cursor()
     datos = (valor,)
-    clientes = miCursor.execute(f'SELECT * FROM {tabla} WHERE {campo} = ?', datos).fetchall()
-    print(clientes)
-    return clientes
+    registro = miCursor.execute(f'SELECT * FROM {tabla} WHERE {campo} = ?', datos).fetchall()
+    print(registro)
+    return registro
     miConexion.commit()
     miConexion.close()
 

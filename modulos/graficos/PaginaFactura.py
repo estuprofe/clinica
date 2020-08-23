@@ -1,5 +1,5 @@
 from modulos.modulos_importados import *
-from modulos.graficos.ElegirCliente import VentanaClientes
+
 from datetime import *
 
     
@@ -150,11 +150,27 @@ class PaginaFactura(tk.Frame):
         print('seleccionado: ',iva_seleccionado)
         
             
-
+    def editar_facturas(self):
+        actualizarRegistro("FACTURA", "CODIGO_FACTURA",
+         self.cuadro_codigo.get(),"ID", self.cuadro_id_factura.get())
+        actualizarRegistro("FACTURA", "FECHA_FACTURA",
+        cal2fecha(self.cal.get()),"ID", self.cuadro_id_factura.get())
+        self.ver_facturas() 
+        
+    def añadir_factura(self):
+        datos = [(self.cuadro_codigo.get(), cal2fecha(self.cal.get()), self.combo_iva.get(), self.cuadro_descuento.get(),
+              self.cuadro_cliente.get())]
+    #print(datos)
+        crearFactura(datos)
+        self.ver()
+    
+    def eliminar_factura(self):
+        borrarRegistro("FACTURA","ID", self.cuadro_id_factura.get())
+        self.ver_facturas() 
 
     def set_cliente(self,cliente):
         self.cliente = cliente
-        print('Cliente elegido', cliente)
+        
  
 
         id_seleccionado=cliente[0]
@@ -188,17 +204,20 @@ class PaginaFactura(tk.Frame):
         
         print(tupla_facturas_seleccionadas)
 
+
         id_factura=tupla_facturas_seleccionadas[0]
 
         self.cuadro_id_factura.delete(0,END)
         self.cuadro_id_factura.insert(END,tupla_facturas_seleccionadas[0])
 
         self.cuadro_cliente.delete(0,END)
-        self.cuadro_cliente.insert(END,tupla_facturas_seleccionadas[5])
+        self.set_cliente(leerRegistro("CLIENTE", "ID", tupla_facturas_seleccionadas[5])[0])
 
         lista_fecha=(str(tupla_facturas_seleccionadas[2]).split("/"))
         self.cal.set_date(datetime(int(lista_fecha[0]),int(lista_fecha[1]),int(lista_fecha[2])))
-        
+
+        self.cuadro_codigo.delete(0,END)
+        self.cuadro_codigo.insert(END,tupla_facturas_seleccionadas[1])        
 
         
     def ver_facturas(self):
