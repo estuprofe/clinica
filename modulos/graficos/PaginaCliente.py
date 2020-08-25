@@ -83,6 +83,7 @@ class PaginaCliente(tk.Frame):
     self.caja_clientes.configure(yscrollcommand=self.scroll.set)
     self.scroll.configure(command=self.caja_clientes.yview)
     self.caja_clientes.bind('<<ListboxSelect>>',self.escribir_campos)
+    self.ver()
 
 
 

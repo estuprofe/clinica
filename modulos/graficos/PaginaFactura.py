@@ -46,10 +46,16 @@ class PaginaFactura(tk.Frame):
         #ttk.Button(self, text="ok", command = lambda: self.ver_fecha()).grid(row=3, column=2)
 
         self.texto_cliente=StringVar()
-        self.etiqueta_cliente = tk.Label(self, text="Cliente: ")
-        self.etiqueta_cliente.grid(row=12, column = 0)
+        self.etiqueta_cliente = tk.Label(self, text="ID Cliente: ")
+        self.etiqueta_cliente.grid(row=11, column = 2)
         self.cuadro_cliente = ttk.Entry(self, textvariable= self.texto_cliente, justify=tk.RIGHT)
-        self.cuadro_cliente.grid(row=12, column = 1)
+        self.cuadro_cliente.grid(row=11, column = 3)
+
+        self.texto_nombre=StringVar()
+        self.etiqueta_nombre = tk.Label(self, text="Nombre: ")
+        self.etiqueta_nombre.grid(row=12, column = 0)
+        self.cuadro_nombre = ttk.Entry(self, textvariable= self.texto_nombre, justify=tk.RIGHT)
+        self.cuadro_nombre.grid(row=12, column = 1)
 
 
         self.texto_dni=StringVar()
@@ -147,22 +153,35 @@ class PaginaFactura(tk.Frame):
         
     def combo_seleccionado(self, event):
         iva_seleccionado = self.combo_iva.get()
-        print('seleccionado: ',iva_seleccionado)
+        self.editar_facturas()
+        self.ver_facturas()
+
         
             
     def editar_facturas(self):
         actualizarRegistro("FACTURA", "CODIGO_FACTURA",
          self.cuadro_codigo.get(),"ID", self.cuadro_id_factura.get())
+
         actualizarRegistro("FACTURA", "FECHA_FACTURA",
         cal2fecha(self.cal.get()),"ID", self.cuadro_id_factura.get())
+        
+
+        actualizarRegistro("FACTURA", "IVA_ID",
+         self.combo_iva.get(),"ID", self.cuadro_id_factura.get())
+
+        actualizarRegistro("FACTURA", "DESCUENTO",
+         self.cuadro_descuento.get(),"ID", self.cuadro_id_factura.get())
+
         self.ver_facturas() 
+
+
         
     def añadir_factura(self):
         datos = [(self.cuadro_codigo.get(), cal2fecha(self.cal.get()), self.combo_iva.get(), self.cuadro_descuento.get(),
               self.cuadro_cliente.get())]
     #print(datos)
         crearFactura(datos)
-        self.ver()
+        self.ver_facturas()
     
     def eliminar_factura(self):
         borrarRegistro("FACTURA","ID", self.cuadro_id_factura.get())
@@ -179,9 +198,13 @@ class PaginaFactura(tk.Frame):
         self.cuadro_dni.insert(END,cliente[1])
 
         self.cuadro_cliente.delete(0,END)
-        self.cuadro_cliente.insert(END,cliente[2])
-        self.cuadro_cliente.insert(END," ")
-        self.cuadro_cliente.insert(END,cliente[3])
+        self.cuadro_cliente.insert(END,cliente[0])
+
+        self.cuadro_nombre.delete(0,END)
+        self.cuadro_nombre.insert(END,cliente[2])
+        self.cuadro_nombre.insert(END," ")
+        self.cuadro_nombre.insert(END,cliente[3])
+
 
         self.cuadro_direccion.delete(0,END)
         self.cuadro_direccion.insert(END,cliente[4])
@@ -194,6 +217,11 @@ class PaginaFactura(tk.Frame):
         self.cuadro_cp.insert(END, cliente[7])
 
 
+
+        actualizarRegistro("FACTURA", "CLIENTE_ID", cliente[0], "ID", id_factura)
+        self.ver_facturas()
+
+
     def caja_factura_seleccionada(self, evento):
 
         global tupla_facturas_seleccionadas
@@ -201,7 +229,7 @@ class PaginaFactura(tk.Frame):
         indice = self.caja_facturas.curselection()[0]
 
         tupla_facturas_seleccionadas=self.caja_facturas.get(indice)
-        
+        cliente_factura = leerRegistro("CLIENTE", "ID", tupla_facturas_seleccionadas[5])
         print(tupla_facturas_seleccionadas)
 
 
@@ -211,13 +239,35 @@ class PaginaFactura(tk.Frame):
         self.cuadro_id_factura.insert(END,tupla_facturas_seleccionadas[0])
 
         self.cuadro_cliente.delete(0,END)
-        self.set_cliente(leerRegistro("CLIENTE", "ID", tupla_facturas_seleccionadas[5])[0])
+        self.set_cliente(cliente_factura[0])
 
-        lista_fecha=(str(tupla_facturas_seleccionadas[2]).split("/"))
+        lista_fecha=(str(tupla_facturas_seleccionadas[2]).split("-"))
         self.cal.set_date(datetime(int(lista_fecha[0]),int(lista_fecha[1]),int(lista_fecha[2])))
 
         self.cuadro_codigo.delete(0,END)
-        self.cuadro_codigo.insert(END,tupla_facturas_seleccionadas[1])        
+        self.cuadro_codigo.insert(END,tupla_facturas_seleccionadas[1])
+
+        self.combo_iva.set(tupla_facturas_seleccionadas[3])
+
+        self.cuadro_descuento.delete(0,END)
+        self.cuadro_descuento.insert(END,tupla_facturas_seleccionadas[4])
+
+
+
+    def borrar(self):
+        self.cuadro_dni.delete(0,END)
+        self.cuadro_cliente.delete(0,END)
+        self.cuadro_nombre.delete(0,END)
+        self.cuadro_direccion.delete(0,END)
+        self.cuadro_cp.delete(0,END)
+        self.cuadro_id_factura.delete(0,END)
+        self.cuadro_cliente.delete(0,END)
+        self.cuadro_codigo.delete(0,END)
+        self.combo_iva.set(0)
+        self.cuadro_descuento.delete(0,END)
+
+
+
 
         
     def ver_facturas(self):
