@@ -6,6 +6,18 @@ from datetime import *
 nombreBD = "clinica.db"
 
 # funciones CRUD
+def cuatroDigitar(numero):
+
+    if numero < 10:
+        cadena = "000"+str(numero)
+    elif numero < 100:
+        cadena = "00" + str(numero)
+    elif numero < 1000:
+        cadena = "0"+ str(numero)
+    else:
+        cadena = str(numero)
+    return cadena
+
 def cal2fecha(fecha):
     fecha=fecha.split("/")
     fecha = datetime(2000+int(fecha[2]),int(fecha[1]),int(fecha[0])).date()

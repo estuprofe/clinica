@@ -12,12 +12,17 @@ from modulos.modulos_importados import *
 # import tkFont as tkfont  # python 2
 #setup
 nombreClinica="Elisa Isabel García López"
+letraFactura="F"
+añoFactura="20"
 
 
 class Aplicacion(tk.Tk):
 
   def __init__(self, *args, **kwargs):
     tk.Tk.__init__(self, *args, **kwargs)
+
+    self.letraFactura=letraFactura
+    self.añoFactura=añoFactura
     
     self.fuente_titulo = tkfont.Font(
         family='Helvetica', size=18, weight="bold", slant="italic")
@@ -43,7 +48,7 @@ class Aplicacion(tk.Tk):
       # will be the one that is visible.
       marco.grid(row=0, column=0, sticky="nsew")
 
-    self.mostrar_marco("PaginaFactura")
+    self.mostrar_marco("PaginaInicial")
 
   def mostrar_marco(self, nombre_pagina):
     '''Show a frame for the given page name'''

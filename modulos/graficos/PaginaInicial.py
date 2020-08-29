@@ -14,7 +14,8 @@ class PaginaInicial(tk.Frame):
     button1 = tk.Button(self, text="Clientes",
                         command=lambda: controlador.mostrar_marco("PaginaCliente"))
     button2 = tk.Button(self, text="Facturas",
-                        command=lambda: controlador.mostrar_marco("PaginaFactura"))
+                        command = lambda: controlador.mostrar_marco("PaginaFactura"))
+
     button3 = tk.Button(self, text="Resumen",
                         command=lambda: controlador.mostrar_marco("PaginaResumen"))
     button1.pack()

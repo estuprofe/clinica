@@ -141,7 +141,7 @@ class PaginaCliente(tk.Frame):
     print (self.caja_clientes.curselection())
 
     tupla_seleccionados=self.caja_clientes.get(indice)
-    self.controlador.marcos['PaginaFactura'].set_cliente(tupla_seleccionados)
+    
 
 
     id_seleccionado=tupla_seleccionados[0]
@@ -175,6 +175,10 @@ class PaginaCliente(tk.Frame):
 
     self.cuadro_email.delete(0,END)
     self.cuadro_email.insert(END,tupla_seleccionados[9])
+
+    self.controlador.marcos['PaginaFactura'].set_cliente(tupla_seleccionados)
+
+
 
       
   def boton_elegir_pulsado(self,event):#Reinicia los cuadros con la información extraída de clientes
