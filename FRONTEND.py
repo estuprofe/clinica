@@ -1,42 +1,29 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#Construido siguiendo el blog https://python-para-impacientes.blogspot.com/
+#Construido siguiendo:
+#videotutoriale de píldorasinformáticas: https://www.youtube.com/watch?v=G2FCfQj-9ig&list=PLU8oAlHdN5BlvPxziopYZRd55pdqFwkeS
+#blog https://python-para-impacientes.blogspot.com/
+#
 #módulos utilizados
 from modulos.modulos_importados import *
 
 
 
-
-
-# import Tkinter as tk     # python 2
-# import tkFont as tkfont  # python 2
-#setup
-nombreClinica="Elisa Isabel García López"
-letraFactura="A"
-añoFactura="20"
-
-ruta_programa = os.path.abspath(os.path.dirname(__file__))
-print(ruta_programa)
-carpeta = "facturas"
-ruta_facturas = os.path.join(ruta_programa,carpeta)
-print (ruta_facturas)
-
-
-
-
+#Clase principal que llevará la aplicación, se encarga de cargar las páginas,  
+#crea las páginas a visualizar y decide cual mostrar
 class Aplicacion(tk.Tk):
 
   def __init__(self, *args, **kwargs):
-    tk.Tk.__init__(self, *args, **kwargs)
-
-    self.letraFactura=letraFactura
-    self.añoFactura=añoFactura
-    self.ruta=ruta_facturas
-    
+    tk.Tk.__init__(self, *args, **kwargs)#inicio
+    #setup para exportar las facturas y los excels
+    ruta_programa = os.path.abspath(os.path.dirname(__file__))
+    carpeta = "facturas"
+    self.letraFactura="A"
+    self.añoFactura="20"
+    self.ruta=os.path.join(ruta_programa,carpeta)
     self.fuente_titulo = tkfont.Font(
         family='Helvetica', size=18, weight="bold", slant="italic")
-    self.geometry('800x600')
-      
+    self.geometry('800x600') 
     self.title(f'Programa de facturación. Clinica {nombreClinica}')
     # the container is where we'll stack a bunch of frames
     # on top of each other, then the one we want visible
