@@ -1,8 +1,8 @@
 from modulos.modulos_importados import *
+from modulos.import_export import *
 
-from datetime import *
 
-    
+
 
 
 
@@ -13,6 +13,7 @@ class PaginaFactura(tk.Frame):
         tk.Frame.__init__(self, padre)
         self.cliente = cliente
         self.controlador =  controlador
+
         #caja de facturas
         self.caja_facturas=tk.Listbox(self, height =10, width=35)
         self.caja_facturas.grid(row=0, column=3, rowspan=9, columnspan = 4)
@@ -22,6 +23,7 @@ class PaginaFactura(tk.Frame):
         self.scroll_facturas.configure(command=self.caja_facturas.yview)
         self.caja_facturas.bind('<<ListboxSelect>>',self.caja_factura_seleccionada)
         #título
+
         self.label = tk.Label(self, text="Factura", font=self.controlador.fuente_titulo)
         self.label.grid(column=0, row=10)
 
@@ -38,8 +40,8 @@ class PaginaFactura(tk.Frame):
         self.etiqueta_codigo = tk.Label(self, text="Codigo de la factura")
         self.etiqueta_codigo.grid(row=20, column = 3)
         self.cuadro_codigo = ttk.Entry(self, textvariable= self.texto_codigo, justify=tk.RIGHT)
-        self.cuadro_codigo.grid(row=20, column = 4)
-        self.auto_id_factura= self.controlador.letraFactura+self.controlador.añoFactura+cuatroDigitar(leerTodo("FACTURA")[-1][0]+1)
+        self.cuadro_codigo.grid(row=20, column = 4) 
+        self.auto_id_factura= self.controlador.letraFactura+self.controlador.añoFactura + cuatroDigitar(leerTodo("FACTURA")[-1][0]+1)
         self.cuadro_codigo.insert(END,self.auto_id_factura)
         
         self.etiqueta_fecha = tk.Label(self, text="Fecha factura")
@@ -146,17 +148,23 @@ class PaginaFactura(tk.Frame):
         
 
 
-        boton = ttk.Button(self, text='Elegir Cliente para la factura', 
-                               command=lambda: controlador.mostrar_marco("PaginaCliente"))
-        boton.grid(row= 10, column = 20)
+        
         
         boton_inicio = tk.Button(self, text="INICIO",
                            command=lambda:  controlador.mostrar_marco("PaginaInicial"))
-        boton_inicio.grid(row=00, column = 30)
+        boton_inicio.grid(row=00, column = 20)
 
-        boton_combo = tk.Button(self, text="Prueba Combo",
-                           command= self.combo_seleccionado)
-        boton_combo.grid(row=90, column = 30)
+        boton = ttk.Button(self, text='Elegir Cliente para la factura', 
+                               command=lambda: controlador.mostrar_marco("PaginaCliente"))
+        boton.grid(row= 10, column = 20)
+
+        boton = ttk.Button(self, text='Imprimir PDF', 
+                               command=lambda: imprimir(controlador.ruta, self.cuadro_codigo.get(), self.cal.get(),
+                               self.cuadro_nombre.get(), self.cuadro_direccion.get(), self.cuadro_cp.get(), self.cuadro_dni.get()
+                               ,self.ver_servicios(), self.cuadro_descuento.get(),self.cuadro_total.get()))#fuente,factura, fecha, cliente, direccion, cp, dni, tratamientos, descuento
+        boton.grid(row= 20, column = 20)
+
+        
 
         boton_actualizar = tk.Button(self, text="actualizar facturas",
                        command=lambda: self.editar_facturas())
@@ -196,10 +204,10 @@ class PaginaFactura(tk.Frame):
         boton_editar_servicio = tk.Button(self, text="Editar servicio",
                            command=lambda: self.eliminar_servicio())
         boton_editar_servicio.grid(row=132, column = 4)
-
-
-        
         # iniciar el cuadro con las facturas
+        self.ver_facturas()
+        
+        
         
     def combo_seleccionado(self, event):
         iva_seleccionado = self.combo_iva.get()
@@ -379,9 +387,11 @@ class PaginaFactura(tk.Frame):
             
     def ver_servicios(self):
         self.caja_servicios.delete(0, END)
+        servicios_factura = []
         for fila in leerRegistro("SERVICIO","FACTURA_ID",self.cuadro_id_factura.get()):
             self.caja_servicios.insert(END,fila) 
-
+            servicios_factura.append(fila)
+        return servicios_factura
     def actualizar_total (self):
         total=0
         for fila in leerRegistro("SERVICIO","FACTURA_ID",self.cuadro_id_factura.get()):

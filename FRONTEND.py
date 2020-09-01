@@ -12,8 +12,16 @@ from modulos.modulos_importados import *
 # import tkFont as tkfont  # python 2
 #setup
 nombreClinica="Elisa Isabel García López"
-letraFactura="F"
+letraFactura="A"
 añoFactura="20"
+
+ruta_programa = os.path.abspath(os.path.dirname(__file__))
+print(ruta_programa)
+carpeta = "facturas"
+ruta_facturas = os.path.join(ruta_programa,carpeta)
+print (ruta_facturas)
+
+
 
 
 class Aplicacion(tk.Tk):
@@ -23,6 +31,7 @@ class Aplicacion(tk.Tk):
 
     self.letraFactura=letraFactura
     self.añoFactura=añoFactura
+    self.ruta=ruta_facturas
     
     self.fuente_titulo = tkfont.Font(
         family='Helvetica', size=18, weight="bold", slant="italic")

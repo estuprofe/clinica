@@ -201,15 +201,15 @@ class PaginaCliente(tk.Frame):
 
   def editar(self):
     #print("CLIENTE", "DNI",self.cuadro_dni.get(),"CLIENTE_ID", id_seleccionado)
-    actualizarRegistro("CLIENTE", "DNI",self.cuadro_dni.get(),"CLIENTE_ID", id_seleccionado)
-    actualizarRegistro("CLIENTE", "NOMBRE",self.cuadro_nombre.get(),"CLIENTE_ID", id_seleccionado)
-    actualizarRegistro("CLIENTE", "APELLIDOS",self.cuadro_apellido.get(),"CLIENTE_ID", id_seleccionado)
-    actualizarRegistro("CLIENTE", "DIRECCION",self.cuadro_direccion.get(),"CLIENTE_ID", id_seleccionado)
-    actualizarRegistro("CLIENTE", "MUNICIPIO",self.cuadro_municipio.get(),"CLIENTE_ID", id_seleccionado)
-    actualizarRegistro("CLIENTE", "PROVINCIA",self.cuadro_provincia.get(),"CLIENTE_ID", id_seleccionado)
-    actualizarRegistro("CLIENTE", "CODIGO_POSTAL",self.cuadro_cp.get(),"CLIENTE_ID", id_seleccionado)
-    actualizarRegistro("CLIENTE", "TELEFONO",self.cuadro_telefono.get(),"CLIENTE_ID", id_seleccionado)
-    actualizarRegistro("CLIENTE", "EMAIL",self.cuadro_email.get(),"CLIENTE_ID", id_seleccionado)
+    actualizarRegistro("CLIENTE", "DNI",self.cuadro_dni.get(),"ID", id_seleccionado)
+    actualizarRegistro("CLIENTE", "NOMBRE",self.cuadro_nombre.get(),"ID", id_seleccionado)
+    actualizarRegistro("CLIENTE", "APELLIDOS",self.cuadro_apellido.get(),"ID", id_seleccionado)
+    actualizarRegistro("CLIENTE", "DIRECCION",self.cuadro_direccion.get(),"ID", id_seleccionado)
+    actualizarRegistro("CLIENTE", "MUNICIPIO",self.cuadro_municipio.get(),"ID", id_seleccionado)
+    actualizarRegistro("CLIENTE", "PROVINCIA",self.cuadro_provincia.get(),"ID", id_seleccionado)
+    actualizarRegistro("CLIENTE", "CODIGO_POSTAL",self.cuadro_cp.get(),"ID", id_seleccionado)
+    actualizarRegistro("CLIENTE", "TELEFONO",self.cuadro_telefono.get(),"ID", id_seleccionado)
+    actualizarRegistro("CLIENTE", "EMAIL",self.cuadro_email.get(),"ID", id_seleccionado)
     self.ver()
 
   def borrar(self):

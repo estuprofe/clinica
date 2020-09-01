@@ -4,24 +4,12 @@ import os
 from datetime import *
 # setup
 nombreBD = "clinica.db"
-
+# aydas sql query varias tablas a la vez https://www.campusmvp.es/recursos/post/Fundamentos-de-SQL-Consultas-SELECT-multi-tabla-JOIN.aspx
 # funciones CRUD
-def cuatroDigitar(numero):
 
-    if numero < 10:
-        cadena = "000"+str(numero)
-    elif numero < 100:
-        cadena = "00" + str(numero)
-    elif numero < 1000:
-        cadena = "0"+ str(numero)
-    else:
-        cadena = str(numero)
-    return cadena
 
-def cal2fecha(fecha):
-    fecha=fecha.split("/")
-    fecha = datetime(2000+int(fecha[2]),int(fecha[1]),int(fecha[0])).date()
-    return fecha
+
+
 
 def crearCliente(datos):
     miConexion = sqlite3.connect(nombreBD)
@@ -64,9 +52,7 @@ def leerRegistro(tabla, campo, valor):
 def leerTodo(tabla):
     miConexion = sqlite3.connect(nombreBD)
     miCursor = miConexion.cursor()
-
     query = miCursor.execute(f'SELECT * FROM {tabla}').fetchall()
-    
     miConexion.commit()
     miConexion.close()
     return query
@@ -92,6 +78,16 @@ def borrarRegistro(tabla, campo, valor):
     print(clientes.fetchall())
     miConexion.commit()
     miConexion.close()
+
+
+def todoFacturasClientes():
+    miConexion = sqlite3.connect(nombreBD)
+    miCursor = miConexion.cursor()
+    query = miCursor.execute(f'SELECT * FROM FACTURA, CLIENTE, SERVICIO WHERE (FACTURA.CLIENTE_ID = CLIENTE.ID AND SERVICIO.FACTURA_ID = FACTURA.ID)').fetchall()
+    miConexion.commit()
+    miConexion.close()
+    return query
+
 
 
 """
