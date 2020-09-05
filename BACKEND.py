@@ -2,8 +2,8 @@ from modulos.modulos_importados import *
 
 
 # setup
-probando = 1
-
+probando = 0
+#setup
 nombreBD = "clinica.db"
 def creacion_db():
 #Creación de la BD y la tabla
@@ -30,6 +30,7 @@ def creacion_db():
         IVA_ID INTEGER,
         DESCUENTO INTEGER,
         CLIENTE_ID INTEGER,
+        COMENTARIO VARCHAR(500),
         FOREIGN KEY(CLIENTE_ID) REFERENCES CLIENTE(ID)     
         )''')
 
@@ -49,9 +50,11 @@ def creacion_db():
     else:
         print(f'El archivo {nombreBD} ya existe')
 
-creacion_db()
+def dame_nombre_bd():
+    return nombreBD
 
 if __name__ == "__main__":
+    creacion_db()
     leerTodo('CLIENTE')
     leerTodo('FACTURA')
     leerTodo('SERVICIO')
@@ -80,7 +83,7 @@ if probando == 1:
     leerTodo('SERVICIO')
     actualizarRegistro('SERVICIO','TRATAMIENTO','CAMBIADO EL TRATAMIENTO', 'ID',1)
     leerTodo('SERVICIO')
-    facturaDatos=[('F200001','2020/07/15',16,20,1),
-                    ('F200002','2020/07/16',4,30,2)] 
+    facturaDatos=[('F200001','2020/07/15',16,20,1,"Comentario 1"),
+                    ('F200002','2020/07/16',4,30,2,"commmmm")] 
     crearFactura(facturaDatos)
     leerTodo('FACTURA')

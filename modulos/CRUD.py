@@ -2,16 +2,19 @@ import sqlite3
 import os
 
 from datetime import *
-# setup
-nombreBD = "clinica.db"
+from modulos.modulos_importados import *
+import BACKEND
 # aydas sql query varias tablas a la vez https://www.campusmvp.es/recursos/post/Fundamentos-de-SQL-Consultas-SELECT-multi-tabla-JOIN.aspx
 # funciones CRUD
 
-
+nombreBD =  BACKEND.dame_nombre_bd()
 
 
 
 def crearCliente(datos):
+    """Crea un nuevo cliente, hay que incluir una lista de datos con 9 valores:
+    (DNI, NOMBRE, APELLIDO, DIRECCIÓN, MUNICIPIO, PROVINCIA, CP, TELÉFONO, EMAIL).
+    """
     miConexion = sqlite3.connect(nombreBD)
     miCursor = miConexion.cursor()
     for i in datos:
@@ -21,6 +24,9 @@ def crearCliente(datos):
 
 
 def crearServicio(datos):
+    """Crea un nuevo servicio, hay que incluir una lista de datos con 4 valores:
+    (fecha,decripción del  tratamiento, precio, ID de la factura que tiene ese servicio).
+    """
     miConexion = sqlite3.connect(nombreBD)
     miCursor = miConexion.cursor()
     for i in datos:
@@ -30,15 +36,21 @@ def crearServicio(datos):
 
 
 def crearFactura(datos):
+    """Crea la factura, hay que incluir una lista de datos con 5 valores:
+    (código de la factura, fecha, IVA, descuento, ID del cliente asociado a la factura).
+    """
+
     miConexion = sqlite3.connect(nombreBD)
     miCursor = miConexion.cursor()
     for i in datos:
-        miCursor.execute(f'INSERT INTO FACTURA VALUES (NULL,?,?,?,?,?)', i)
+        miCursor.execute(f'INSERT INTO FACTURA VALUES (NULL,?,?,?,?,?,?)', i)
     miConexion.commit()
     miConexion.close()
 
 
 def leerRegistro(tabla, campo, valor):
+    """Lee un registro concreto, ejemplo de uso:
+    leerRegistro("FACTURA", "ID", 8) te da todos los datos de la factura cuyo ID es 8"""
     miConexion = sqlite3.connect(nombreBD)
     miCursor = miConexion.cursor()
     datos = (valor,)
@@ -50,6 +62,7 @@ def leerRegistro(tabla, campo, valor):
 
 
 def leerTodo(tabla):
+    """devuelve todos los campos de la tabla que digamos"""
     miConexion = sqlite3.connect(nombreBD)
     miCursor = miConexion.cursor()
     query = miCursor.execute(f'SELECT * FROM {tabla}').fetchall()
@@ -59,6 +72,14 @@ def leerTodo(tabla):
 
 
 def actualizarRegistro(tabla, campo, valor, condicion_columna, condicion_valor):
+    """actualizar cualquier registro, se le debe indicar:
+    tabla: a modificar
+    campo: a modificar
+    valor: que queremos incluir sustituyendo a lo que había
+    condicion_columna: para indicar que campo vamos a sustituir
+    condicion_valor: para decir que valor debe ir en la condición.
+        Ejemplo: actualizarRegistro("CLIENTE", "DNI","12345678M","ID", 4)
+        cambia en la tabla clientes el dni (actualizándolo a 12345678M) en el  cliente con ID=4."""
     miConexion = sqlite3.connect(nombreBD)
     miCursor = miConexion.cursor()
     datos = (valor, condicion_valor)
@@ -71,6 +92,7 @@ def actualizarRegistro(tabla, campo, valor, condicion_columna, condicion_valor):
 
 
 def borrarRegistro(tabla, campo, valor):
+    """Borrar el registro, hay que introducir la tabla, el campo y el valor a eliminar"""
     miConexion = sqlite3.connect(nombreBD)
     miCursor = miConexion.cursor()
     datos = (valor,)
@@ -81,6 +103,7 @@ def borrarRegistro(tabla, campo, valor):
 
 
 def todoFacturasClientes():
+    """Obtiene todas las facturas con sus clientes y servicios relacionados"""
     miConexion = sqlite3.connect(nombreBD)
     miCursor = miConexion.cursor()
     query = miCursor.execute(f'SELECT * FROM FACTURA, CLIENTE, SERVICIO WHERE (FACTURA.CLIENTE_ID = CLIENTE.ID AND SERVICIO.FACTURA_ID = FACTURA.ID)').fetchall()
@@ -90,13 +113,4 @@ def todoFacturasClientes():
 
 
 
-"""
 
-#PROBANDO SERVICIOS, LEER DATOS, CAMBIAR, .
-
-leerTodo('SERVICIO')
-actualizarRegistro('SERVICIO','TRATAMIENTO','CAMBIADO EL TRATAMIENTO', 'ID',1)
-leerTodo('SERVICIO')
-
-leerTodo('FACTURA')
-"""

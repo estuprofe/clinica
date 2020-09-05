@@ -27,37 +27,55 @@ def cal2fecha(fecha):
     return fecha
 
 
-def imprimir(ruta, factura, fecha, nombre, direccion, cp, dni, tratamientos, descuento, total):
+def imprimir(ruta, factura, fecha, nombre, direccion, cp, dni, tratamientos, comentario, iva, descuento, total):
     archivo = f"{factura}.pdf"
     ruta = os.path.join(ruta,archivo)
+    salto_de_linea=18
+    posicion_texto = 750
 
     print(ruta)
     pdf = canvas.Canvas(ruta, pagesize=A4)
     pdf.setLineWidth(.3)
     pdf.setFont('Helvetica', 18)
 
-    pdf.drawString(100,750,"Clínica de Fisioterapia Elisa Isabel García López")
+    pdf.drawString(100,posicion_texto,"Clínica de Fisioterapia Elisa Isabel García López")
+    posicion_texto -=salto_de_linea
     pdf.setFont('Helvetica', 12)
-    pdf.drawString(100,720,"Elisa Isabel García López")
-    pdf.drawString(100,690,"DNI: 48482651C")
-    pdf.drawString(100,660,"C/ Agustín Virgili, 25.")
-    pdf.drawString(100,630,"Corvera, Murcia")
+    pdf.drawString(100,posicion_texto,"Elisa Isabel García López")
+    posicion_texto -=salto_de_linea
+    pdf.drawString(100,posicion_texto,"DNI: 48482651C")
+    posicion_texto -=salto_de_linea
+    pdf.drawString(100,posicion_texto,"C/ Agustín Virgili, 25.")
+    posicion_texto -=salto_de_linea
+    pdf.drawString(100,posicion_texto,"Corvera, Murcia")
+    posicion_texto -=salto_de_linea
 
-    pdf.line(100,600, 500, 600)
+    pdf.line(100,posicion_texto, 500,posicion_texto)
+    posicion_texto -=salto_de_linea
 
-    pdf.drawString(100,570, "CLIENTE:")
-    pdf.drawString(100,540, f"{nombre}. DNI: {dni}")
+    pdf.setFont('Helvetica-Bold', 12)
+    pdf.drawString(100,posicion_texto, "CLIENTE:")
+    pdf.setFont('Helvetica', 12)
+    posicion_texto -=salto_de_linea
+    pdf.drawString(100,posicion_texto, f"{nombre}. DNI: {dni}")
+    posicion_texto -=salto_de_linea
 
-    pdf.drawString(100,510, f"{direccion} {cp}")
+    pdf.drawString(100,posicion_texto, f"{direccion} {cp}")
+    posicion_texto -=salto_de_linea
 
-    pdf.line(100,500, 500, 500)
-    pdf.drawString(100, 470 , f"SERVICIOS:")
+    pdf.line(100,posicion_texto, 500,posicion_texto)
+    posicion_texto -=salto_de_linea
     
-    pdf.drawString (100, 430, "Fecha Servicio")
-    pdf.drawString (200, 430, "|Tratamiento")
-    pdf.drawString (400, 430, "|€")#|    Tratamiento              | Precio")
+    pdf.setFont('Helvetica-Bold', 12)
+    pdf.drawString(100, posicion_texto , f"SERVICIOS:") 
+    pdf.setFont('Helvetica', 12) 
+    posicion_texto -=salto_de_linea  
+    pdf.drawString (100, posicion_texto, "Fecha Servicio")
+    pdf.drawString (200, posicion_texto, "|Tratamiento")
+    pdf.drawString (400, posicion_texto, "|€")#|    Tratamiento              | Precio")
+    posicion_texto -=salto_de_linea
 
-    posicion_texto = 400
+    
     acumulado=0
     for tratamiento in tratamientos:
         print(tratamiento)
@@ -66,17 +84,32 @@ def imprimir(ruta, factura, fecha, nombre, direccion, cp, dni, tratamientos, des
         pdf.drawString (200, posicion_texto, tratamiento[2])
         pdf.drawString (400, posicion_texto, str(tratamiento[3]))
         acumulado+=tratamiento[3]
-        posicion_texto -=30
+        posicion_texto -= salto_de_linea
 
     pdf.line(100, posicion_texto, 500, posicion_texto)
-    posicion_texto -=30
+    posicion_texto -=salto_de_linea
+    pdf.setFont('Helvetica-Bold', 12)
+    pdf.drawString(100, posicion_texto, f"Comentarios:")
+    pdf.setFont('Helvetica', 12) 
+    posicion_texto -=salto_de_linea
+    lineas = comentario.split("\n")
+    for linea in lineas:
+        pdf.drawString(100, posicion_texto, linea)
+        posicion_texto -=salto_de_linea
+    pdf.line(100, posicion_texto, 500, posicion_texto)
+    posicion_texto -=salto_de_linea
     pdf.drawString(100, posicion_texto, f"Acumulado: {acumulado} €")
-    posicion_texto -=30
+    posicion_texto -=salto_de_linea
+    pdf.drawString(100, posicion_texto, f"Iva: {iva} €")
+    posicion_texto -=salto_de_linea
     pdf.drawString(100, posicion_texto, f"Descuento %: {descuento} €")
-    posicion_texto -=30
+    posicion_texto -=salto_de_linea
     pdf.setFont('Helvetica', 18)
-    posicion_texto -=30
+    posicion_texto -=salto_de_linea
     pdf.drawString(100, posicion_texto, f"TOTAL: {total} €")
+    pdf.setFont('Helvetica', 10)
+    posicion_texto -=salto_de_linea
+    pdf.drawString(100, posicion_texto, f"Parrafada de protección de datos")
 
     pdf.save()
     comando = "start AcroRD32 "+"\""+ ruta +"\""+" &"

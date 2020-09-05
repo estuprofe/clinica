@@ -1,0 +1,4 @@
+- Mejorar la experiencia de meter varias facturas del tirón para clientes contado.
+- Búsqueda de facturas por nombre
+- Búsqueda de facturas por fecha
+- Creación de facturas a partir de archivo exterior.
