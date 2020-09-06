@@ -2,6 +2,13 @@
 
 import tkinter as tk
 import os
+import sqlite3
+import BACKEND
+
+
+from datetime import *
+
+
 
 #gráficos
 from tkinter import font as tkfont  # python 3
@@ -15,13 +22,14 @@ from openpyxl import Workbook
 from datetime import datetime
 
 #Clases propias importadas
-
+from modulos.CRUD import *
 from modulos.graficos.PaginaCliente import * 
 from modulos.graficos.PaginaFactura import *
 from modulos.graficos.PaginaInicial import *
 from modulos.graficos.PaginaResumen import *
-from modulos.CRUD import *
-import BACKEND
+
+
+
 
 
 

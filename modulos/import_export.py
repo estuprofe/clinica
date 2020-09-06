@@ -100,9 +100,11 @@ def imprimir(ruta, factura, fecha, nombre, direccion, cp, dni, tratamientos, com
     posicion_texto -=salto_de_linea
     pdf.drawString(100, posicion_texto, f"Acumulado: {acumulado} €")
     posicion_texto -=salto_de_linea
-    pdf.drawString(100, posicion_texto, f"Iva: {iva} €")
+    eurosIva = acumulado*(float(iva)/100)
+    pdf.drawString(100, posicion_texto, f"Iva: {iva}% = {eurosIva} €")
     posicion_texto -=salto_de_linea
-    pdf.drawString(100, posicion_texto, f"Descuento %: {descuento} €")
+    eurosDescuento = acumulado * (float(descuento)/100)
+    pdf.drawString(100, posicion_texto, f"Descuento: {descuento}% = {eurosDescuento} €")
     posicion_texto -=salto_de_linea
     pdf.setFont('Helvetica', 18)
     posicion_texto -=salto_de_linea

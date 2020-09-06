@@ -230,6 +230,7 @@ class PaginaFactura(tk.Frame):
         iva_seleccionado = self.combo_iva.get()
         actualizarRegistro("FACTURA", "IVA_ID",
             self.combo_iva.get(),"ID", self.texto_id_factura.get())    
+        actualizarRegistro("FACTURA", "DESCUENTO", self.cuadro_descuento.get(),"ID", self.texto_id_factura.get() )
         self.ver_facturas()
         self.actualizar_total()
        
@@ -258,7 +259,9 @@ class PaginaFactura(tk.Frame):
         self.texto_id_factura.set(leerTodo("FACTURA")[-1][0])
         self.controlador.marcos['PaginaInicial'].cuadro_numero.delete(0,END)
         self.controlador.marcos['PaginaInicial'].cuadro_numero.insert(END, cuatroDigitar(leerTodo("FACTURA")[-1][0]+1))
+        self.controlador.marcos['PaginaInicial'].actualizar()
         self.ver_facturas()
+
 
 
     def añadir_servicio(self):
@@ -394,8 +397,9 @@ class PaginaFactura(tk.Frame):
         total=0
 
         for fila in leerRegistro("SERVICIO","FACTURA_ID",self.texto_id_factura.get()):
-            total += int(fila[3])
-        total_calculado = total  * (1 - int(self.cuadro_descuento.get())*0.01) * (1 + int(self.combo_iva.get())*0.01)
+            total += float(fila[3])
+        total_calculado = total  * (1 - float(self.cuadro_descuento.get())*0.01) * (1 + float(self.combo_iva.get())*0.01)
+        total_calculado = round(total_calculado, 2)
         print ("Total actualizado a ",total_calculado)
         self.cuadro_total.delete(0, END)
         self.cuadro_total.insert(END, total_calculado)

@@ -1,15 +1,10 @@
-import sqlite3
-import os
 
-from datetime import *
 from modulos.modulos_importados import *
-import BACKEND
+
+
 # aydas sql query varias tablas a la vez https://www.campusmvp.es/recursos/post/Fundamentos-de-SQL-Consultas-SELECT-multi-tabla-JOIN.aspx
 # funciones CRUD
-
-nombreBD =  BACKEND.dame_nombre_bd()
-
-
+nombreBD = BACKEND.nombreBD
 
 def crearCliente(datos):
     """Crea un nuevo cliente, hay que incluir una lista de datos con 9 valores:
@@ -102,14 +97,18 @@ def borrarRegistro(tabla, campo, valor):
     miConexion.close()
 
 
-def todoFacturasClientes():
+def todoFacturasClientes(campo_orden, campo_condicion, condicionMayor, condicionMenor):
     """Obtiene todas las facturas con sus clientes y servicios relacionados"""
     miConexion = sqlite3.connect(nombreBD)
     miCursor = miConexion.cursor()
-    query = miCursor.execute(f'SELECT * FROM FACTURA, CLIENTE, SERVICIO WHERE (FACTURA.CLIENTE_ID = CLIENTE.ID AND SERVICIO.FACTURA_ID = FACTURA.ID)').fetchall()
+    consulta = f'SELECT * FROM FACTURA, CLIENTE, SERVICIO WHERE (FACTURA.CLIENTE_ID = CLIENTE.ID AND SERVICIO.FACTURA_ID = FACTURA.ID AND {campo_condicion} > "{condicionMayor}" AND {campo_condicion} < "{condicionMenor}") ORDER BY {campo_orden}'
+    print ('y esta es la consulta que le hago a la base de datos \n', consulta)
+    query = miCursor.execute(consulta).fetchall()
     miConexion.commit()
     miConexion.close()
     return query
+
+
 
 
 

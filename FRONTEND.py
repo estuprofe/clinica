@@ -6,9 +6,8 @@
 #     exportar a excel https://es.stackoverflow.com/questions/36060/pasar-los-datos-de-una-lista-a-una-hoja-de-c%C3%A1lculo-mediante-dos-celdas-de-la-ho
 #      ayudas sql query varias tablas a la vez https://www.campusmvp.es/recursos/post/Fundamentos-de-SQL-Consultas-SELECT-multi-tabla-JOIN.aspx
 #módulos utilizados
+
 from modulos.modulos_importados import *
-
-
 
 
 class Aplicacion(tk.Tk):
@@ -59,15 +58,6 @@ class Aplicacion(tk.Tk):
     '''Show a frame for the given page name'''
     marco = self.marcos[nombre_pagina]
     marco.tkraise()
-
-
-
-
-
-
-
-
-
 
 if __name__ == "__main__":
   app = Aplicacion()

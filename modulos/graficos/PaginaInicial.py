@@ -39,7 +39,13 @@ class PaginaInicial(tk.Frame):
     self.etiqueta_numero = tk.Label(self, text="Numero") 
     self.cuadro_numero = ttk.Entry(self, textvariable= self.texto_numero, justify=tk.RIGHT)
     self.cuadro_numero.delete(0,END)
-    self.cuadro_numero.insert(END, cuatroDigitar(leerTodo("FACTURA")[-1][0]+1))
+    try:
+        self.cuadro_numero.insert(END, cuatroDigitar(leerTodo("FACTURA")[-1][0]+1))
+    except IndexError:
+        self.cuadro_numero.insert(END, cuatroDigitar(1))
+
+
+
     #print (cuatroDigitar(leerTodo("FACTURA")[-1][0]+1))
 
     self.texto_resultado=StringVar()   
@@ -72,3 +78,4 @@ class PaginaInicial(tk.Frame):
     self.cuadro_resultado.insert(END, cuatroDigitar(int(self.cuadro_numero.get())))
     self.controlador.marcos['PaginaFactura'].cuadro_codigo.delete(0,END)
     self.controlador.marcos['PaginaFactura'].cuadro_codigo.insert(END,self.cuadro_resultado.get())
+    self.controlador.marcos['PaginaFactura'].set_cliente(leerTodo("CLIENTE")[0])

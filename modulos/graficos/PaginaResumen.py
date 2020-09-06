@@ -25,14 +25,28 @@ class PaginaResumen(tk.Frame):
                            command= self.trimestral)
         button.pack()
         button2.pack()
+        datos_cliente_inicial=[('','Clientes contado','','','','','','','')]
+        try:
+            crearCliente(datos_cliente_inicial)
+        except:
+            print('Cliente ya creado')
+        try:
+            self.controlador.marcos['PaginaInicial'].actualizar()#hasta que no están todas las páginas creadas no puedo asignar la numeración automática, esta es la última página en inicializarse, por eso lo pongo aquí
+        except:
+            print('Sin id_factura')
+
         #####################################
         #FUNCIONES#
         #####################################
     def trimestral(self):
         #facturas = leerTodo("FACTURA")
         #clientes = leerTodo("CLIENTE")
-        consulta = todoFacturasClientes()#me devuelve una lista con la factura-cliente-servicio asociado
-        print (consulta)
+        fecha_inicial=cal2fecha('01/07/20')
+        print(fecha_inicial)
+        fecha_final=cal2fecha('30/09/20')
+        consulta = todoFacturasClientes("CODIGO_FACTURA", "FECHA_FACTURA", fecha_inicial, fecha_final)
+        
+        print ("Esta es la consulta que recibe antes de pasar a excel: \n",consulta)
         excel = Workbook()
         hoja= excel.active
         hoja.title = "Facturado"
@@ -58,11 +72,11 @@ class PaginaResumen(tk.Frame):
         columna_ptr +=1
         hoja.cell(column=columna_ptr, row=fila_ptr, value="€")
         columna_ptr +=1
-        hoja.cell(column=columna_ptr, row=fila_ptr, value="IVA")
+        hoja.cell(column=columna_ptr, row=fila_ptr, value="IVA %")
         columna_ptr +=1
-        hoja.cell(column=columna_ptr, row=fila_ptr, value="Descuento")
+        hoja.cell(column=columna_ptr, row=fila_ptr, value="Descuento % ")
         columna_ptr +=1
-        hoja.cell(column=columna_ptr, row=fila_ptr, value="Total facturado €")
+        hoja.cell(column=columna_ptr, row=fila_ptr, value="Total facturado €(Impuestos y descuentos incluidos")
         columna_ptr =1
         fila_ptr +=1
         #3ª fila
@@ -77,7 +91,7 @@ class PaginaResumen(tk.Frame):
 
                 print ("se tiene en cuenta ", acumulado)
                 hoja.cell(column=columna_ptr+6, row=fila_ptr-1, value=acumulado)
-                hoja.cell(column=columna_ptr+9, row=fila_ptr-1, value=acumulado*(1+info[3]/100)*(1-info[4]))
+                hoja.cell(column=columna_ptr+9, row=fila_ptr-1, value=round((acumulado*(1+info[3]/100))*(1-info[4]/100),2))
                 continue
             else:
                 acumulado = 0
@@ -103,7 +117,8 @@ class PaginaResumen(tk.Frame):
             columna_ptr +=1
             hoja.cell(column=columna_ptr, row=fila_ptr, value=info[4])#Descuento
             columna_ptr +=1
-            acumulado += info[-2]*(1+info[3]/100)*(1-info[4])
+            acumulado += info[-2]*(1+info[3]/100)*(1-info[4]/100)
+            acumulado = round(acumulado, 2)
             hoja.cell(column=columna_ptr, row=fila_ptr, value=acumulado)
             columna_ptr =1
             fila_ptr +=1
@@ -114,6 +129,9 @@ class PaginaResumen(tk.Frame):
         excel.save(filename=self.salida)
         comando = "start excel.exe "+"\""+ self.salida +"\""+" &"
         os.system(comando)
+
+
+
 
 
 
