@@ -101,7 +101,7 @@ def todoFacturasClientes(campo_orden, campo_condicion, condicionMayor, condicion
     """Obtiene todas las facturas con sus clientes y servicios relacionados"""
     miConexion = sqlite3.connect(nombreBD)
     miCursor = miConexion.cursor()
-    consulta = f'SELECT * FROM FACTURA, CLIENTE, SERVICIO WHERE (FACTURA.CLIENTE_ID = CLIENTE.ID AND SERVICIO.FACTURA_ID = FACTURA.ID AND {campo_condicion} > "{condicionMayor}" AND {campo_condicion} < "{condicionMenor}") ORDER BY {campo_orden}'
+    consulta = f'SELECT * FROM FACTURA, CLIENTE, SERVICIO WHERE (FACTURA.CLIENTE_ID = CLIENTE.ID AND SERVICIO.FACTURA_ID = FACTURA.ID AND {campo_condicion} >= "{condicionMayor}" AND {campo_condicion} <= "{condicionMenor}") ORDER BY {campo_orden}'
     print ('y esta es la consulta que le hago a la base de datos \n', consulta)
     query = miCursor.execute(consulta).fetchall()
     miConexion.commit()

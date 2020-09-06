@@ -41,9 +41,10 @@ class PaginaResumen(tk.Frame):
     def trimestral(self):
         #facturas = leerTodo("FACTURA")
         #clientes = leerTodo("CLIENTE")
-        fecha_inicial=cal2fecha('01/07/20')
+        fecha_inicial=cal2fecha(self.controlador.marcos['PaginaInicial'].cal_inicio.get())
         print(fecha_inicial)
-        fecha_final=cal2fecha('30/09/20')
+        fecha_final=cal2fecha(self.controlador.marcos['PaginaInicial'].cal_fin.get())
+        print(fecha_final)
         consulta = todoFacturasClientes("CODIGO_FACTURA", "FECHA_FACTURA", fecha_inicial, fecha_final)
         
         print ("Esta es la consulta que recibe antes de pasar a excel: \n",consulta)

@@ -51,10 +51,20 @@ class PaginaInicial(tk.Frame):
     self.texto_resultado=StringVar()   
     self.etiqueta_resultado = tk.Label(self, text="resultado") 
     self.cuadro_resultado = ttk.Entry(self, textvariable= self.texto_resultado, justify=tk.RIGHT)
-    
-
     self.button4 = tk.Button(self, text="Actualizar Numeración",
                         command= self.actualizar)
+
+    self.etiqueta_fecha_inicio = tk.Label(self, text="Fecha inicial para el EXCEL")
+    self.cal_inicio = DateEntry(self, width=12, background='darkblue',
+                        foreground='white', borderwidth=2, locale='es_ES')
+    self.cal_inicio.set_date(datetime(2020,7,1))
+
+    self.etiqueta_fecha_final = tk.Label(self, text="Fecha final para el EXCEL")
+    self.cal_fin = DateEntry(self, width=12, background='darkblue',
+                        foreground='white', borderwidth=2, locale='es_ES')
+    self.cal_fin.set_date(datetime(2020,9,30))
+    
+
    
     self.button1.pack()
     self.button2.pack()
@@ -69,7 +79,10 @@ class PaginaInicial(tk.Frame):
     self.etiqueta_resultado.pack()
     self.cuadro_resultado.pack()
     self.button4.pack()
-
+    self.etiqueta_fecha_inicio.pack()
+    self.cal_inicio.pack()
+    self.etiqueta_fecha_final.pack()
+    self.cal_fin.pack()
 
   def actualizar(self):
     self.cuadro_resultado.delete(0,END)

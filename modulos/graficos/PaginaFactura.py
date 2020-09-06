@@ -155,7 +155,7 @@ class PaginaFactura(tk.Frame):
         boton_editar_servicio.grid(row=132, column = 4)
 
         self.etiqueta_fecha_servicio = tk.Label(self, text="Fecha servicio")
-        self.etiqueta_fecha.grid(row=133, column = 3)
+        self.etiqueta_fecha_servicio.grid(row=133, column = 3)
         self.cal_servicio = DateEntry(self, width=12, background='darkblue',
                         foreground='white', borderwidth=2, locale='es_ES')
         self.cal_servicio.grid(row=133, column=4)
