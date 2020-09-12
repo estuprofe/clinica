@@ -1,10 +1,11 @@
 
-from modulos.modulos_importados import *
 
+import sqlite3
 
+nombreBD = "clinica.db"
 # aydas sql query varias tablas a la vez https://www.campusmvp.es/recursos/post/Fundamentos-de-SQL-Consultas-SELECT-multi-tabla-JOIN.aspx
 # funciones CRUD
-nombreBD = BACKEND.nombreBD
+print(nombreBD)
 
 def crearCliente(datos):
     """Crea un nuevo cliente, hay que incluir una lista de datos con 9 valores:

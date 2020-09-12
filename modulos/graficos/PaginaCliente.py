@@ -1,4 +1,8 @@
-from modulos.modulos_importados import *
+
+import tkinter as tk
+from tkinter import ttk
+from tkinter import StringVar
+from tkinter import END
 from modulos.CRUD import *
 
 
@@ -137,10 +141,10 @@ class PaginaCliente(tk.Frame):
     
     global tupla_seleccionados
     global id_seleccionado
-    indice = self.caja_clientes.curselection()[0]
+    indice_cliente = self.caja_clientes.curselection()[0]
     print (self.caja_clientes.curselection())
 
-    tupla_seleccionados=self.caja_clientes.get(indice)
+    tupla_seleccionados=self.caja_clientes.get(indice_cliente)
     
 
 
@@ -176,15 +180,11 @@ class PaginaCliente(tk.Frame):
     self.cuadro_email.delete(0,END)
     self.cuadro_email.insert(END,tupla_seleccionados[9])
 
+    self.caja_clientes.itemconfigure(indice_cliente, bg="#00aa00", fg="#fff")#darle colorcito verde a lo seleccionado
+    self.caja_clientes.see(indice_cliente)# esto es para que se centre en el que que has seleccionado
+
     self.controlador.marcos['PaginaFactura'].set_cliente(tupla_seleccionados)
 
-
-
-      
-  def boton_elegir_pulsado(self,event):#Reinicia los cuadros con la información extraída de clientes
-    
-
-    seleccionado_ventana = VentanaClientes()
     
   def ver(self):
     self.caja_clientes.delete(0, END)

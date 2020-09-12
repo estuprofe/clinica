@@ -1,5 +1,7 @@
+import os
+import sqlite3
+from modulos.CRUD import crearCliente
 
-from modulos.modulos_importados import *
 
 
 
@@ -50,6 +52,9 @@ def creacion_db():
         miConexion.commit()
         miConexion.close()
         
+        datos_iniciales = [('','Clientes contado','','','','','','','')]
+        crearCliente(datos_iniciales)
+
 
     else:
         print(f'El archivo {nombreBD} ya existe')
@@ -65,6 +70,7 @@ if __name__ == "__main__":
     
 # funciones CRUD
 
+
 if probando == 1:
 
     datos=[('123','Luis','Zurita Herrera', 'micalle','jorelre','ererer','12342','69696868','putomail.comfg43434343rgrddd4gr'),
@@ -72,7 +78,7 @@ if probando == 1:
         ('1222ff22','Jaime','Zurita Herrera', 'micalle','jorelre','ererer','12342','69696868','putomail.comfd4gr'),
         ('1222f','Luis','Zurita Herrera', 'micalle','jorelre','ererer','12342','69696868','putrgrddd4gr')]
 
-    #crearCliente(datos)
+    crearCliente(datos)
     leerRegistro('CLIENTE','NOMBRE','Luis')
 
 

@@ -1,4 +1,6 @@
 - Mejorar la experiencia de meter varias facturas del tirón para clientes contado.
+- Actualizar la factura al meter los comentarios.
+- Al añadir los servicios actualizar facturas
 - Búsqueda de facturas por nombre
 - Búsqueda de facturas por fecha
 - Creación de facturas a partir de archivo exterior.

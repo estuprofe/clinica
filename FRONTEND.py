@@ -6,8 +6,15 @@
 #     exportar a excel https://es.stackoverflow.com/questions/36060/pasar-los-datos-de-una-lista-a-una-hoja-de-c%C3%A1lculo-mediante-dos-celdas-de-la-ho
 #      ayudas sql query varias tablas a la vez https://www.campusmvp.es/recursos/post/Fundamentos-de-SQL-Consultas-SELECT-multi-tabla-JOIN.aspx
 #módulos utilizados
-
-from modulos.modulos_importados import *
+import tkinter as tk
+import os
+from modulos.BACKEND import creacion_db
+from tkinter import font as tkfont
+from modulos.graficos.PaginaCliente import PaginaCliente
+from modulos.graficos.PaginaFactura import PaginaFactura
+from modulos.graficos.PaginaInicial import PaginaInicial
+from modulos.graficos.PaginaResumen import PaginaResumen
+from modulos.import_export import cuatroDigitar
 
 
 class Aplicacion(tk.Tk):
@@ -19,13 +26,12 @@ class Aplicacion(tk.Tk):
     """
 
   def __init__(self, *args, **kwargs):
-    BACKEND.creacion_db()
+    creacion_db()
     tk.Tk.__init__(self, *args, **kwargs)#inicio
     #setup para exportar las facturas y los excels
     #lo que ponga aquí lo podré llevar al resto de las páginas mediante controlador.loquesea
     ruta_programa = os.path.abspath(os.path.dirname(__file__))
     carpeta = "facturas"
-    self.letraFactura="A"
     self.añoFactura="20"
     self.ruta=os.path.join(ruta_programa,carpeta)
     self.nombreClinica='Elisa Isabel García López'

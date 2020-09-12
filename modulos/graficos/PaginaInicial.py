@@ -1,13 +1,24 @@
-from modulos.modulos_importados import *
-    
+import tkinter as tk
+from tkinter import ttk
+from tkinter import StringVar
+from tkinter import END
+
+from modulos.import_export import cargar_configuracion
+from modulos.import_export import grabar_configuracion
+from modulos.import_export import cuatroDigitar
+
+from modulos.CRUD import *
 
 
 class PaginaInicial(tk.Frame):
 
   def __init__(self, padre, controlador):
     tk.Frame.__init__(self, padre)
+    self.configuracion = cargar_configuracion()
+    print(self.configuracion)
     self.controlador = controlador
-    self.label = tk.Label(self, text=f"Programa de facturación. Clinica {controlador.nombreClinica}",
+    self.clientexdefecto= leerTodo("CLIENTE")[0]
+    self.label = tk.Label(self, text=f"Programa de facturación. {self.configuracion['clinica']} {self.configuracion['dueño']}",
                      font=controlador.fuente_titulo)
     self.label.pack(side="top", fill="x", pady=10)
 
@@ -25,24 +36,20 @@ class PaginaInicial(tk.Frame):
     self.etiqueta_letra = tk.Label(self, text="Letra") 
     self.cuadro_letra = ttk.Entry(self, textvariable= self.texto_letra, justify=tk.RIGHT)
     self.cuadro_letra.delete(0,END)
-    self.cuadro_letra.insert(END, "A")
+    self.cuadro_letra.insert(END, self.configuracion["letra"])
 
     self.texto_año=StringVar()
     self.etiqueta_año = tk.Label(self, text="Año") 
     self.cuadro_año = ttk.Entry(self, textvariable= self.texto_año, justify=tk.RIGHT)
     self.cuadro_año.delete(0,END)
-    self.cuadro_año.insert(END, "20")
-
-    print("Pasa por aquí")
+    self.cuadro_año.insert(END, self.configuracion["año"])
 
     self.texto_numero=StringVar()
     self.etiqueta_numero = tk.Label(self, text="Numero") 
     self.cuadro_numero = ttk.Entry(self, textvariable= self.texto_numero, justify=tk.RIGHT)
     self.cuadro_numero.delete(0,END)
-    try:
-        self.cuadro_numero.insert(END, cuatroDigitar(leerTodo("FACTURA")[-1][0]+1))
-    except IndexError:
-        self.cuadro_numero.insert(END, cuatroDigitar(1))
+    self.cuadro_numero.insert(END, cuatroDigitar(int(self.configuracion["numero"])))
+
 
 
 
@@ -53,17 +60,6 @@ class PaginaInicial(tk.Frame):
     self.cuadro_resultado = ttk.Entry(self, textvariable= self.texto_resultado, justify=tk.RIGHT)
     self.button4 = tk.Button(self, text="Actualizar Numeración",
                         command= self.actualizar)
-
-    self.etiqueta_fecha_inicio = tk.Label(self, text="Fecha inicial para el EXCEL")
-    self.cal_inicio = DateEntry(self, width=12, background='darkblue',
-                        foreground='white', borderwidth=2, locale='es_ES')
-    self.cal_inicio.set_date(datetime(2020,7,1))
-
-    self.etiqueta_fecha_final = tk.Label(self, text="Fecha final para el EXCEL")
-    self.cal_fin = DateEntry(self, width=12, background='darkblue',
-                        foreground='white', borderwidth=2, locale='es_ES')
-    self.cal_fin.set_date(datetime(2020,9,30))
-    
 
    
     self.button1.pack()
@@ -79,16 +75,23 @@ class PaginaInicial(tk.Frame):
     self.etiqueta_resultado.pack()
     self.cuadro_resultado.pack()
     self.button4.pack()
-    self.etiqueta_fecha_inicio.pack()
-    self.cal_inicio.pack()
-    self.etiqueta_fecha_final.pack()
-    self.cal_fin.pack()
+    
+
+  def siguienteNumero(self):
+    nuevo_numero = str(int(self.configuracion["numero"])+1)
+    self.configuracion["numero"] = nuevo_numero
+    self.cuadro_numero.delete(0,END)
+    self.cuadro_numero.insert(END, nuevo_numero)
+    self.actualizar()
+
 
   def actualizar(self):
     self.cuadro_resultado.delete(0,END)
     self.cuadro_resultado.insert(END, self.cuadro_letra.get())
     self.cuadro_resultado.insert(END, self.cuadro_año.get())
     self.cuadro_resultado.insert(END, cuatroDigitar(int(self.cuadro_numero.get())))
+
     self.controlador.marcos['PaginaFactura'].cuadro_codigo.delete(0,END)
     self.controlador.marcos['PaginaFactura'].cuadro_codigo.insert(END,self.cuadro_resultado.get())
-    self.controlador.marcos['PaginaFactura'].set_cliente(leerTodo("CLIENTE")[0])
+    self.controlador.marcos['PaginaFactura'].set_cliente(self.clientexdefecto)
+    grabar_configuracion(self.configuracion)

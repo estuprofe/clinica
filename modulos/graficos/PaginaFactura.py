@@ -1,7 +1,17 @@
 
+import tkinter as tk
+from tkinter import ttk
+from tkinter import StringVar
+from tkinter import END
 
-from modulos.modulos_importados import *
-from modulos.import_export import *
+from tkcalendar import Calendar, DateEntry
+from datetime import datetime
+from modulos.import_export import cal2fecha
+from modulos.import_export import imprimir
+from modulos.CRUD import *
+
+
+
 
 
 
@@ -151,7 +161,7 @@ class PaginaFactura(tk.Frame):
         boton_eliminar_servicio.grid(row=131, column = 4)
 
         boton_editar_servicio = tk.Button(self, text="Editar servicio",
-                           command=lambda: self.eliminar_servicio())
+                           command=lambda: self.editar_servicio())
         boton_editar_servicio.grid(row=132, column = 4)
 
         self.etiqueta_fecha_servicio = tk.Label(self, text="Fecha servicio")
@@ -174,7 +184,7 @@ class PaginaFactura(tk.Frame):
         self.cuadro_precio_tratamiento = ttk.Entry(self, textvariable= self.texto_precio_tratamiento, justify=tk.RIGHT)
         self.cuadro_precio_tratamiento.grid(row=135, column = 4)
         self.cuadro_precio_tratamiento.delete(0, END)
-        self.cuadro_precio_tratamiento.insert(END, 32)
+        self.cuadro_precio_tratamiento.insert(END, 28)
 
         ###############################
         #PIE DE FACTURA
@@ -210,6 +220,7 @@ class PaginaFactura(tk.Frame):
         
         
         # iniciar el cuadro con las facturas
+
         self.ver_facturas()
         
 ###############################
@@ -244,32 +255,46 @@ class PaginaFactura(tk.Frame):
             self.combo_iva.get(),"ID", self.texto_id_factura.get())
         actualizarRegistro("FACTURA", "DESCUENTO",
             self.cuadro_descuento.get(),"ID", self.texto_id_factura.get())
+        actualizarRegistro("FACTURA", "CLIENTE_ID", self.texto_cliente.get(),"ID", self.texto_id_factura.get() )
         actualizarRegistro("FACTURA", "COMENTARIO",
             self.cuadro_comentarios.get("1.0",END),"ID", self.texto_id_factura.get())
         self.ver_facturas() 
         self.actualizar_total()
-   
+
+
 
     def añadir_factura(self):
         datos = [(self.cuadro_codigo.get(), cal2fecha(self.cal.get()), self.combo_iva.get(), self.cuadro_descuento.get(),
               self.ID_cliente_asociado, self.cuadro_comentarios.get("1.0", END))] 
         print(self.cuadro_comentarios.get("1.0", END))
         crearFactura(datos)
-        print(leerTodo("FACTURA")[-1])
+        self.borrar()
         self.texto_id_factura.set(leerTodo("FACTURA")[-1][0])
-        self.controlador.marcos['PaginaInicial'].cuadro_numero.delete(0,END)
-        self.controlador.marcos['PaginaInicial'].cuadro_numero.insert(END, cuatroDigitar(leerTodo("FACTURA")[-1][0]+1))
-        self.controlador.marcos['PaginaInicial'].actualizar()
         self.ver_facturas()
+        self.controlador.marcos["PaginaInicial"].siguienteNumero()
 
-
+    def editar_servicio(self):
+        #FECHA_SERVICIO ,        TRATAMIENTO, PRECIO_FINAL,        FACTURA_ID 
+        actualizarRegistro("SERVICIO", "FECHA_SERVICIO",
+            cal2fecha(self.cal_servicio.get()),"ID", tupla_servicios_seleccionados[0])
+        actualizarRegistro("SERVICIO", "TRATAMIENTO",
+            self.cuadro_tratamiento.get(),"ID", tupla_servicios_seleccionados[0])
+        actualizarRegistro("SERVICIO", "PRECIO_FINAL",
+            self.cuadro_precio_tratamiento.get(),"ID", tupla_servicios_seleccionados[0])     
+        self.ver_servicios() 
+        self.actualizar_total()
+   
 
     def añadir_servicio(self):
-        datos = [(cal2fecha(self.cal_servicio.get()), self.cuadro_tratamiento.get(), self.cuadro_precio_tratamiento.get(),
+        if self.texto_id_factura.get() !="Factura no seleccionada":
+            datos = [(cal2fecha(self.cal_servicio.get()), self.cuadro_tratamiento.get(), self.cuadro_precio_tratamiento.get(),
               self.texto_id_factura.get())]#fecha, tratamiento, precio y factura a la que pertenece
-        crearServicio(datos)
-        self.ver_servicios()
-        self.actualizar_total()
+            crearServicio(datos)
+            self.ver_servicios()
+            self.actualizar_total()
+        else:
+            print("No hay factura seleccionada para asociarle el servicio")  
+        
     
 
     def eliminar_factura(self):
@@ -307,7 +332,7 @@ class PaginaFactura(tk.Frame):
 
         self.cuadro_cp.delete(0,END)
         self.cuadro_cp.insert(END, cliente[7])
-        actualizarRegistro("FACTURA", "CLIENTE_ID", cliente[0], "ID", id_factura)
+
         self.ver_facturas()
 
         
@@ -316,11 +341,15 @@ class PaginaFactura(tk.Frame):
         global id_factura
         if (self.caja_facturas.curselection()):
             indice = self.caja_facturas.curselection()[0]
+
             #print("Al pulsar se ve esto: "+ str(self.caja_facturas.curselection()))
+            
             tupla_facturas_seleccionadas=self.caja_facturas.get(indice)
+
             cliente_factura = leerRegistro("CLIENTE", "ID", tupla_facturas_seleccionadas[5])
             id_factura=str(tupla_facturas_seleccionadas[0])
-            print("ID FACTURA: ", id_factura)
+            
+            
             self.texto_id_factura.set(id_factura)
             
             
@@ -341,15 +370,17 @@ class PaginaFactura(tk.Frame):
             self.cuadro_descuento.insert(END,tupla_facturas_seleccionadas[4])
 
 
-
+            self.caja_facturas.itemconfigure(indice, bg="#00aa00", fg="#fff")#darle colorcito verde a lo seleccionado
+            self.caja_facturas.see(indice)# esto es para que se centre en el que que has seleccionado
+            
             self.ver_servicios()
             self.actualizar_total()
 
 
     def caja_servicio_seleccionado(self, evento):
         global tupla_servicios_seleccionados    
-        indice = self.caja_servicios.curselection()[0]
-        tupla_servicios_seleccionados=self.caja_servicios.get(indice)      
+        indice_servicio = self.caja_servicios.curselection()[0]
+        tupla_servicios_seleccionados=self.caja_servicios.get(indice_servicio)      
         
         lista_fecha=(str(tupla_servicios_seleccionados[1]).split("-"))
         self.cal_servicio.set_date(datetime(int(lista_fecha[0]),int(lista_fecha[1]),int(lista_fecha[2])))
@@ -360,6 +391,9 @@ class PaginaFactura(tk.Frame):
         self.cuadro_precio_tratamiento.delete(0, END)
         self.cuadro_precio_tratamiento.insert(END, tupla_servicios_seleccionados[3])
 
+        self.caja_servicios.itemconfigure(indice_servicio, bg="#00aa00", fg="#fff")#darle colorcito verde a lo seleccionado
+        self.caja_servicios.see(indice_servicio)# esto es para que se centre en el que que has seleccionado
+
         self.ver_servicios()
         self.actualizar_total()
 
@@ -369,14 +403,15 @@ class PaginaFactura(tk.Frame):
         self.cuadro_nombre.delete(0,END)
         self.cuadro_direccion.delete(0,END)
         self.cuadro_cp.delete(0,END)
-        self.texto_id_factura.set("")
-        self.texto_cliente.set("")
+        self.texto_id_factura.set("Factura no seleccionada")
         self.cuadro_comentarios.delete("1.0",END)
         self.cuadro_codigo.delete(0,END)
         self.caja_servicios.delete(0, END)
         self.combo_iva.set(0)
         self.cuadro_descuento.delete(0,END)
+        self.cuadro_descuento.insert(END,"0")
         self.cuadro_total.delete(0,END)
+        self.controlador.marcos['PaginaInicial'].actualizar() 
         
     def ver_facturas(self):
         self.caja_facturas.delete(0, END)
@@ -385,12 +420,15 @@ class PaginaFactura(tk.Frame):
    
 
     def ver_servicios(self):
+        servicios_factura=[]
         self.caja_servicios.delete(0, END)
-        servicios_factura = []
         for fila in leerRegistro("SERVICIO","FACTURA_ID",self.texto_id_factura.get()):
-            self.caja_servicios.insert(END,fila) 
             servicios_factura.append(fila)
+            self.caja_servicios.insert(END,fila)
         return servicios_factura
+            
+
+
 
 
     def actualizar_total (self):

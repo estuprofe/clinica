@@ -1,6 +1,7 @@
 #exportar a pdf  https://ricardogeek.com/como-crear-documentos-pdf-usando-python/
 #http://www.pythondiario.com/2015/04/generar-un-pdf-partir-de-un-sencillo.html
 import os
+import json
 import os.path
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
@@ -11,7 +12,6 @@ variable_de_prueba="MECAGOENTOTUSMUERTOSQUENOSEIMPORTA"
 parrafada_datos = "EN CUMPLIMIENTO DEL RUE 2016/679 - 27 abril le informamos que El Responsable: ELISA ISABEL GARCIA LOPEZ©                          CENTRO DE FISIOTERAPIA;  Delegado de Protección de datos:protecciondedatos@totaldata.es; Finalidad del tratamiento de datos: Gestión de servicios dentro de la actividad CENTRO DE FISIOTERAPIA;¿Que nos legitima a tratar sus datos?: Ejecución de un contrato y consentimiento explícito del interesado; Destinatarios: No se cederán datos a terceros, salvo obligación legal. Publicación de su imagen en web y/o redes sociales: (Me opongo __); Envío información comercial sobre productos y servicios relacionados con los servicios solicitados y fidelizarle como cliente: (Me opongo ); Derechos Usted tiene derecho a obtener confirmación sobre si estamos tratando sus datos personales por tanto tiene derecho a acceder a sus datos personales, rectificar los datos inexactos o solicitar su supresión cuando los datos ya no sean necesarios. Ejercicio de derechos ELISA ISABEL GARCIA LOPEZ © CENTRO DE FISIOTERAPIA o al Correo electrónico  DPO: protecciondedatos@totaldata.es indicando el nombre de la empresa; Información adicional en la dirección indicada o en la web"
 
 def cuatroDigitar(numero):
-
     if numero < 10:
         cadena = "000"+str(numero)
     elif numero < 100:
@@ -27,6 +27,16 @@ def cal2fecha(fecha):
     fecha = datetime(2000+int(fecha[2]),int(fecha[1]),int(fecha[0])).date()
     return fecha
 
+def grabar_configuracion(configuracion):
+    archivo = open("config.json", "w")
+    json.dump(configuracion, archivo )
+    archivo.close()
+
+def cargar_configuracion():
+    archivo = open("config.json", "r")
+    configuracion= json.load(archivo)
+    return configuracion
+    archivo.close()
 
 def imprimir(ruta, factura, fecha, nombre, direccion, cp, dni, tratamientos, comentario, iva, descuento, total):
     archivo = f"{factura}.pdf"
@@ -34,7 +44,6 @@ def imprimir(ruta, factura, fecha, nombre, direccion, cp, dni, tratamientos, com
     salto_de_linea=18
     posicion_texto = 750
     margen = 70
-
     print(ruta)
     pdf = canvas.Canvas(ruta, pagesize=A4)
     pdf.setLineWidth(.3)
@@ -77,11 +86,9 @@ def imprimir(ruta, factura, fecha, nombre, direccion, cp, dni, tratamientos, com
     pdf.drawString (margen*5, posicion_texto, "|€")#|    Tratamiento              | Precio")
     posicion_texto -=salto_de_linea
 
-    
     acumulado=0
     for tratamiento in tratamientos:
         print(tratamiento)
-        
         pdf.drawString (margen, posicion_texto, tratamiento[1])
         pdf.drawString (margen*3, posicion_texto, "|"+tratamiento[2])
         pdf.drawString (margen*5, posicion_texto, "|"+str(tratamiento[3]))
@@ -130,3 +137,10 @@ def imprimir(ruta, factura, fecha, nombre, direccion, cp, dni, tratamientos, com
     pdf.save()
     comando = "start AcroRD32 "+"\""+ ruta +"\""+" &"
     os.system(comando)
+
+    
+if not(os.path.isfile("config.json")):#crear el archivo de configuración si no existe
+    configuracion_inicial = {"letra": "A", "año": "20", "numero": "1", "clinica": "Clínica de Fisioterapia", "dueño":"Elisa Isabel García López"}
+    grabar_configuracion(configuracion_inicial)
+
+
